@@ -14,13 +14,16 @@ class FlowCommand(PluginCommand):
 
           Usage:
                 workflow list
-                workflow run FILENAME
-                workflow node add NODENAME
-                workflow edge add FROM TO
+                workflow add [--name=NAME] --file=FILENAME
+                workflow run [--name=NAME] [--log=LOG]
+                workflow run --file=FILENAME [--log=LOG]
+                workflow node add NODENAME NAME
+                workflow edge add FROM TO NAME
 
           This command does some useful things.
 
           Arguments:
+              NAME       the name of the workflow
               FILENAME   a file name
               NODENAME   the name of the node
               FROM       the edge source
