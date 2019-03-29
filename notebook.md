@@ -51,3 +51,4 @@
 # Week 03/25/19 - 03/29/19
  * add nodes to mongodb
  * query for next available workflow node
+ * rework nodes database code with professor (office hours)
