@@ -4,14 +4,16 @@ import re
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.flow.Node import Node
 
-SPLIT_CHARS = ["\|", "&", ";"]
-SPLIT_RE = re.compile("|".join(SPLIT_CHARS))
 
 
 class WorkFlow:
     def __init__(self, name, flowstring):
+
+        self.SPLIT_CHARS = ["\|", "&", ";"]
+        self.SPLIT_RE = re.compile("|".join(self.SPLIT_CHARS))
+
         self.flowstring = flowstring
-        nodes = SPLIT_RE.split(flowstring)
+        nodes = self.SPLIT_RE.split(flowstring)
         flow_nodes = []
         self.database = CmDatabase()
         self.name = name
