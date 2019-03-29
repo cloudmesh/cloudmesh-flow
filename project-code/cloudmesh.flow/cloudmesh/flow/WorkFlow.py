@@ -11,6 +11,7 @@ class WorkflowDB(object):
     def __init__(self, name="workflow"):
         self.database = CmDatabase()
         self.workflow_name = name
+        self.collection = self.database.collection(name)
 
     def attributes(self, name):
         data = {
@@ -31,23 +32,20 @@ class WorkflowDB(object):
         node.update(self.attributes(name))
         return node
 
-    def add_edge(self, node):
-        pass
+    def add_edge(self, node, depends_on):
+        self.collection.update_one({"name" : node.name}, {"$push" : {"dependencies" : depends_on.name}})
 
-    def node_node(self, name=None):
-        pass
-
-    def get_edge(self, name=None):
-        pass
+    def get_node(self, name=None):
+        return self.collection.find_one({"name" : name})
 
     def list(self, node=None, edge=None):
-        pass
+        return self.collection.find({})
 
     def find_root_nodes(self):
-        pass
+        return self.collection.find({"dependencies.0" : {"$exists" : False}})
 
     def resolve_node_dependency(self, name=None):
-        pass
+        return self.collection.update_many({"dependencies" : name}, {"$pull" : {"dependencies" : name}})
 
     def add_specification(self, spec):
         pass
@@ -67,13 +65,20 @@ class WorkFlow(object):
         flow_nodes = []
         self.database = WorkflowDB()
         self.name = name
+        self.node_names = []
         for node in nodes:
             flow_node = Node(node)
+            self.node_names.append(node)
             flow_node.workflow = name
             print(flow_node)
             flow_nodes.append(flow_node)
             self.database.add_node(flow_node.toDict())
-
+        for token in flowstring.split(" "):
+            if token in self.node_names:
+                print("token is a node", token)
+            else:
+                print("token is an edge", token)
+        self.database.add_edge(flow_nodes[0], flow_nodes[1])
     def __repr__(self):
         return " ".join([self.name, self.flowstring])
 
@@ -89,11 +94,11 @@ class WorkFlow(object):
 
 
 if __name__ == "__main__":
-    # flowstring = sys.argv[1]
-    # flow = WorkFlow("myflow", flowstring)
+    flowstring = sys.argv[1]
+    flow = WorkFlow("myflow", flowstring)
     # print(flow)
     # flow.run()
 
-    w = WorkflowDB("workflow01")
-    node = {"name": "world"}
-    w.add_node(node)
+    #w = WorkflowDB("workflow01")
+    #node = {"name": "world"}
+    #w.add_node(node)
