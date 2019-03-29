@@ -3,8 +3,8 @@ from cloudmesh.shell.command import command
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.flow.api.manager import Manager
 
+
 class FlowCommand(PluginCommand):
-    
 
     # noinspection PyUnusedLocal
     @command
@@ -38,7 +38,6 @@ class FlowCommand(PluginCommand):
 
         m = Manager()
 
-
         if arguments.NODE and arguments.add:
             node = arguments.NODENAME
             add_node(node)
@@ -46,7 +45,6 @@ class FlowCommand(PluginCommand):
         elif arguments.list:
             print("option b")
             m.list("just calling list without parameter")
-
 
         def add_node(node):
             pass
@@ -59,5 +57,3 @@ class FlowCommand(PluginCommand):
 
         def generate_flow_string():
             pass
-
-
