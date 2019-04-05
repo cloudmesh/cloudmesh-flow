@@ -6,17 +6,21 @@ from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.flow.Node import Node
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
 from lark import Lark
+from lark.tree import pydot__tree_to_png
 
 grammar = """
-NODE : /[A-z]+/
-TOKEN_SEQ : ";"
-TOKEN_PAR : "||"
-GROUP : NODE 
-        | TOKEN_SEQ
+    node: /[a-zA-Z]+/
+    sequence: ";"
+    parallel: "||"
+    join: sequence | parallel
+    expr: node join node | group | node
+    group: "(" expr ")" | expr join expr
 
+    %import common.WS
+    %ignore WS
 """
 
-parser = Lark(grammar)
+parser = Lark(grammar, start = "expr")
 
 class WorkflowDB(object):
 
@@ -111,8 +115,10 @@ class WorkFlow(object):
 if __name__ == "__main__":
     flowstring = sys.argv[2]
     flowname = sys.argv[1]
-    print(parser.parse(flowstring))
-    flow = WorkFlow(flowname, flowstring)
+    tree = parser.parse(flowstring)
+    print(tree.pretty())
+    pydot__tree_to_png(tree, "tree.png")
+    #flow = WorkFlow(flowname, flowstring)
     # print(flow)
     # flow.run()
 
