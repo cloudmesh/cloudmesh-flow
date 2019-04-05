@@ -2,6 +2,7 @@ from __future__ import print_function
 from cloudmesh.shell.command import command
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.flow.api.manager import Manager
+from cloudmesh.flow.WorkFlow import WorkFlow, WorkflowDB
 
 
 class FlowCommand(PluginCommand):
@@ -13,14 +14,14 @@ class FlowCommand(PluginCommand):
         ::
 
           Usage:
-                workflow list
-                workflow add [--name=NAME] --file=FILENAME
-                workflow run [--name=NAME] [--log=LOG]
-                workflow run --file=FILENAME [--log=LOG]
-                workflow node add NODENAME NAME
-                workflow edge add FROM TO NAME
+                flow list
+                flow add [--name=NAME] --file=FILENAME
+                flow run [--name=NAME] [--log=LOG]
+                flow run --file=FILENAME [--log=LOG]
+                flow node add NODENAME NAME
+                flow edge add FROM TO NAME
 
-          This command does some useful things.
+          This command manages and executes workflows
 
           Arguments:
               NAME       the name of the workflow
@@ -37,7 +38,7 @@ class FlowCommand(PluginCommand):
         print(arguments)
 
         m = Manager()
-
+        db = WorkflowDb()
         if arguments.NODE and arguments.add:
             node = arguments.NODENAME
             add_node(node)
@@ -47,13 +48,16 @@ class FlowCommand(PluginCommand):
             m.list("just calling list without parameter")
 
         def add_node(node):
-            pass
+            print("adding a node", node)
+            new_node = Node(node)
+            db.add_node(node)
+             
 
         def add_dep(node1, node2):
-            pass
+            db.add_edge(node1, node2)
 
         def parse_flow_string(string):
-            pass
+            flow = Workflow("workflow", string)
 
         def generate_flow_string():
             pass

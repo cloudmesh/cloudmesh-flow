@@ -1,17 +1,29 @@
 #!/usr/bin/python
 import sys
 import re
+from pprint import pprint
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.flow.Node import Node
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
+from lark import Lark
 
+grammar = """
+NODE : /[A-z]+/
+TOKEN_SEQ : ";"
+TOKEN_PAR : "||"
+GROUP : NODE 
+        | TOKEN_SEQ
+
+"""
+
+parser = Lark(grammar)
 
 class WorkflowDB(object):
 
     def __init__(self, name="workflow"):
         self.database = CmDatabase()
         self.workflow_name = name
-        self.collection = self.database.collection(name)
+        self.collection = self.database.collection(f"{name}-flow")
 
     def attributes(self, name):
         data = {
@@ -33,6 +45,7 @@ class WorkflowDB(object):
         return node
 
     def add_edge(self, node, depends_on):
+        pprint(depends_on.name)
         self.collection.update_one({"name" : node.name}, {"$push" : {"dependencies" : depends_on.name}})
 
     def get_node(self, name=None):
@@ -62,13 +75,15 @@ class WorkFlow(object):
 
         self.flowstring = flowstring
         nodes = self.SPLIT_RE.split(flowstring)
+        pprint(nodes)
         flow_nodes = []
-        self.database = WorkflowDB()
+        self.database = WorkflowDB(name)
         self.name = name
         self.node_names = []
         for node in nodes:
-            flow_node = Node(node)
-            self.node_names.append(node)
+            node_name = node.replace(" ", "")
+            flow_node = Node(node_name)
+            self.node_names.append(node_name)
             flow_node.workflow = name
             print(flow_node)
             flow_nodes.append(flow_node)
@@ -94,8 +109,10 @@ class WorkFlow(object):
 
 
 if __name__ == "__main__":
-    flowstring = sys.argv[1]
-    flow = WorkFlow("myflow", flowstring)
+    flowstring = sys.argv[2]
+    flowname = sys.argv[1]
+    print(parser.parse(flowstring))
+    flow = WorkFlow(flowname, flowstring)
     # print(flow)
     # flow.run()
 
