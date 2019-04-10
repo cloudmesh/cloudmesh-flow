@@ -3,6 +3,57 @@
 __pycache__/
 *.py[cod]
 *$py.class
+.DS_*
+_*
+.#*
+*.html
+*.class
+*.iso
+*.rpm
+*.class
+*.exe
+*.o
+.idea
+
+*-dot2tex-*
+# LATEX FILES
+single_tb.tex
+dest
+*.tdo
+*.fls
+*.markdown.*
+# LaTeX
+*.dvi
+*.out
+*.synctex.*
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.idx
+*.ilg
+*.ind
+*.ptc
+*.run.xml
+*.toc
+*.log
+*.fdb_latexmk
+*.fls
+*.tdo
+*.listing
+*.lof
+*.cb
+*.cb2
+*.lb
+*--
+
+.idea
+# Byte-compiled / optimized / DLL files
+/_book/
+__pycache__/
+*.py[cod]
+*$py.class
+dist
 
 # C extensions
 *.so
@@ -88,3 +139,15 @@ ENV/
 
 # Rope project settings
 .ropeproject
+#Ipython Notebook
+.ipynb_checkpoints
+
+# Editor
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+paper/report.pdf
+
+
