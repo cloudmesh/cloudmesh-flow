@@ -9,11 +9,11 @@ from lark import Lark
 from lark.tree import pydot__tree_to_png
 
 grammar = """
-    node: /[a-zA-Z]+/
+    flownode: /[a-zA-Z]+/
     sequence: ";"
     parallel: "||"
     join: sequence | parallel
-    expr: node join node | group | node
+    expr: flownode join flownode | group | flownode
     group: "(" expr ")" | expr join expr
 
     %import common.WS
