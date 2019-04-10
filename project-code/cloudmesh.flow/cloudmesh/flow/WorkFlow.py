@@ -117,7 +117,7 @@ if __name__ == "__main__":
     flowname = sys.argv[1]
     tree = parser.parse(flowstring)
     print(tree.pretty())
-    pydot__tree_to_png(tree, "tree.png")
+    pydot__tree_to_png(tree, "ee.png")
     #flow = WorkFlow(flowname, flowstring)
     # print(flow)
     # flow.run()
