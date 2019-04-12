@@ -1,2 +1,2 @@
 graphviz
-lark
+lark-parser

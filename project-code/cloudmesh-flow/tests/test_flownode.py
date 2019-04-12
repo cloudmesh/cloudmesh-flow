@@ -21,4 +21,7 @@ class Test_flownode:
 
     def test_create(self):
         a = 1
+        print()
+        print("hello world",a)
+        print()
         assert a==1 
