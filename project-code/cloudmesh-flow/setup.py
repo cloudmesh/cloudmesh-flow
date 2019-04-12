@@ -29,6 +29,7 @@ def readfile(filename):
 #
 requiers = """
 graphviz
+lark
 """.split("\n")
 
 # dependency_links = ['http://github.com/nicolaiarocci/eve.git@develop']
