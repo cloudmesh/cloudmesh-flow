@@ -5,7 +5,7 @@ from pprint import pprint
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.flow.Node import Node
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
-from lark import Lark
+from lark import Lark, Visitor
 from lark.tree import pydot__tree_to_png
 
 grammar = """
@@ -111,13 +111,45 @@ class WorkFlow(object):
     def run_node(self, node):
         print("running node", node)
 
+class FlowConstructor(Visitor):
+    def flownode(self, val):
+        print("node", val,  val.children[0])
+        name = val.children[0]
+        node = Node(name)
+        node.workflow = self.flowname
+        self.db.add_node(node.toDict())
+
+    def join(self, val):
+        join_type = val.children[0].data
+        print("join", val.children, "as", join_type)
+
+    def group(self, val):
+        print(val, len(val.children))
+        #expressions are either a single node or a group
+        if len(val.children) == 1: return
+        lhs = val.children[0]
+        join = val.children[1]
+        rhs = val.children[2]
+        join_type = join.children[0].data
+        print("join of type", join_type)
+        if join_type == "sequence":
+            lhs_node_name = lhs.children[0].children[0]
+            rhs_node_name = rhs.children[0].children[0]
+            print("join", lhs_node_name, "with", rhs_node_name, "in type", join_type)
 
 if __name__ == "__main__":
     flowstring = sys.argv[2]
     flowname = sys.argv[1]
     tree = parser.parse(flowstring)
     print(tree.pretty())
-    pydot__tree_to_png(tree, "ee.png")
+    db = WorkflowDB(flowname)
+    flow = FlowConstructor()
+    flow.db = db
+    flow.flowname = flowname
+    flow.visit(tree)
+        
+    #pydot__tree_to_png(tree, "ee.png")
+
     #flow = WorkFlow(flowname, flowstring)
     # print(flow)
     # flow.run()
