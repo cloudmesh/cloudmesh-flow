@@ -1,5 +1,5 @@
-package=bar
-pyenv=ENV2
+package=flow
+pyenv=ENV3
 UNAME=$(shell uname)
 export ROOT_DIR=${PWD}/cloudmesh/rest/server
 MONGOD=mongod --dbpath ~/.cloudmesh/data/db --bind_ip 127.0.0.1

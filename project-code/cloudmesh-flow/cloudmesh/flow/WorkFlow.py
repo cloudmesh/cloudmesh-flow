@@ -13,8 +13,9 @@ grammar = """
     sequence: ";"
     parallel: "||"
     join: sequence | parallel
-    expr: flownode join flownode | group | flownode
-    group: "(" expr ")" | expr join expr
+    expr:  group | flownode
+    basegroup.1: flownode join flownode
+    group: "(" expr ")" | basegroup | flownode join expr | expr join flownode | expr join expr
 
     %import common.WS
     %ignore WS
@@ -49,8 +50,7 @@ class WorkflowDB(object):
         return node
 
     def add_edge(self, node, depends_on):
-        pprint(depends_on.name)
-        self.collection.update_one({"name" : node.name}, {"$push" : {"dependencies" : depends_on.name}})
+        self.collection.update_one({"name" : node}, {"$push" : {"dependencies" : depends_on}})
 
     def get_node(self, name=None):
         return self.collection.find_one({"name" : name})
@@ -123,7 +123,7 @@ class FlowConstructor(Visitor):
         join_type = val.children[0].data
         print("join", val.children, "as", join_type)
 
-    def group(self, val):
+    def basegroup(self, val):
         print(val, len(val.children))
         #expressions are either a single node or a group
         if len(val.children) == 1: return
@@ -133,9 +133,10 @@ class FlowConstructor(Visitor):
         join_type = join.children[0].data
         print("join of type", join_type)
         if join_type == "sequence":
-            lhs_node_name = lhs.children[0].children[0]
-            rhs_node_name = rhs.children[0].children[0]
+            lhs_node_name = lhs.children[0]
+            rhs_node_name = rhs.children[0]
             print("join", lhs_node_name, "with", rhs_node_name, "in type", join_type)
+            self.db.add_edge(lhs_node_name, rhs_node_name)
 
 if __name__ == "__main__":
     flowstring = sys.argv[2]

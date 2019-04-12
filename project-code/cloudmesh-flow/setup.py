@@ -37,11 +37,11 @@ pygments
 version = readfile("VERSION")[0].strip()
 readme = readfile('README.rst')
 
-NAME = "cloudmesh.flow"
+NAME = "cloudmesh-flow"
 DESCRIPTION = "A command called flow for the cloudmesh shell"
 AUTHOR = "Robert Ludwig"
 AUTHOR_EMAIL = "robludwig@gmail.com"
-URL = "https://github.com/cloudmesh/cloudmesh.workflow"
+URL = "https://github.com/cloudmesh/cloudmesh-flow"
 LONG_DESCRIPTION = "\n".join(readme)
 
 
