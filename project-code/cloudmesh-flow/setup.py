@@ -28,8 +28,7 @@ def readfile(filename):
 # add minimum requirements here
 #
 requiers = """
-psutil
-pygments
+graphviz
 """.split("\n")
 
 # dependency_links = ['http://github.com/nicolaiarocci/eve.git@develop']
@@ -70,7 +69,6 @@ setup \
     tests_require=[
         "flake8",
         "coverage",
-        "tox",
     ],
     zip_safe=False,
     namespace_packages=['cloudmesh'],
