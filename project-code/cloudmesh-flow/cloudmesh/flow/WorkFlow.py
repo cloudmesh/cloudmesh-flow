@@ -58,6 +58,9 @@ class WorkflowDB(object):
     def list(self, node=None, edge=None):
         return self.collection.find({})
 
+    def set_node_status(self, node=None, status):
+        return self.collection.update_one({"name" : node}, {"$set" : {"status" : status})
+
     def find_root_nodes(self):
         return self.collection.find({"dependencies.0" : {"$exists" : False}})
 
@@ -66,6 +69,11 @@ class WorkflowDB(object):
 
     def add_specification(self, spec):
         pass
+
+    def start_flow(self):
+        started_collection_name = f"{self.workflow_name}-flow-active"
+        self.collection.aggregate([{"$project" : {"cm" : 1, "kind" : 1, "cloud" : 1, "name" : 1, "status" : "pending"}}, {"$out" : started_collection_name}])
+        self.collection = self.database.collection(started_collection_name)
 
     def add_graph(self, yamlfile):
         pass
@@ -148,6 +156,7 @@ if __name__ == "__main__":
     flow.db = db
     flow.flowname = flowname
     flow.visit(tree)
+    db.start_flow()
         
     #pydot__tree_to_png(tree, "ee.png")
 
