@@ -23,7 +23,7 @@ grammar = """
 
 parser = Lark(grammar, start = "expr")
 
-class WorkflowDB(object):
+class WorkFlowDB(object):
 
     def __init__(self, name="workflow"):
         self.database = CmDatabase()
@@ -58,8 +58,8 @@ class WorkflowDB(object):
     def list(self, node=None, edge=None):
         return self.collection.find({})
 
-    def set_node_status(self, node=None, status):
-        return self.collection.update_one({"name" : node}, {"$set" : {"status" : status})
+    def set_node_status(self, node, status):
+        return self.collection.update_one({"name" : node}, {"$set" : {"status" : status}})
 
     def find_root_nodes(self):
         return self.collection.find({"dependencies.0" : {"$exists" : False}})
@@ -72,7 +72,7 @@ class WorkflowDB(object):
 
     def start_flow(self):
         started_collection_name = f"{self.workflow_name}-flow-active"
-        self.collection.aggregate([{"$project" : {"cm" : 1, "kind" : 1, "cloud" : 1, "name" : 1, "status" : "pending"}}, {"$out" : started_collection_name}])
+        self.collection.aggregate([{"$project" : {"dependencies" :1, "cm" :1, "kind" : 1, "cloud" : 1, "name" : 1, "status" : "pending"}}, {"$out" : started_collection_name}])
         self.collection = self.database.collection(started_collection_name)
 
     def add_graph(self, yamlfile):
@@ -89,7 +89,7 @@ class WorkFlow(object):
         nodes = self.SPLIT_RE.split(flowstring)
         pprint(nodes)
         flow_nodes = []
-        self.database = WorkflowDB(name)
+        self.database = WorkFlowDB(name)
         self.name = name
         self.node_names = []
         for node in nodes:
@@ -151,7 +151,7 @@ if __name__ == "__main__":
     flowname = sys.argv[1]
     tree = parser.parse(flowstring)
     print(tree.pretty())
-    db = WorkflowDB(flowname)
+    db = WorkFlowDB(flowname)
     flow = FlowConstructor()
     flow.db = db
     flow.flowname = flowname
@@ -164,6 +164,6 @@ if __name__ == "__main__":
     # print(flow)
     # flow.run()
 
-    #w = WorkflowDB("workflow01")
+    #w = WorkFlowDB("workflow01")
     #node = {"name": "world"}
     #w.add_node(node)

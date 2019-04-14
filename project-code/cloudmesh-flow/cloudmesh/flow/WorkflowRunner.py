@@ -1,4 +1,4 @@
-from cloudmesh.flow.Workflow import WorkFlowDB
+from cloudmesh.flow.WorkFlow import WorkFlowDB
 import subprocess
 import time
 
@@ -22,7 +22,7 @@ class WorkflowRunner(object):
             self.running = len(self.running_jobs) > 0
 
     def start_node(self, node):
-        pass
+        self.db.set_node_status(node, "running")
 
     def resolve_node(self, node, status):
         pass
@@ -36,7 +36,7 @@ class WorkflowRunner(object):
             else:
                 self.resolve_node(process["node"], status)
         self.start_available_nodes()
-
+        time.sleep(300)
 
 
 if __name__ == "__main__":
