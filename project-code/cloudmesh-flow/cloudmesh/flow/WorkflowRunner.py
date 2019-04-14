@@ -23,9 +23,15 @@ class WorkflowRunner(object):
 
     def start_node(self, node):
         self.db.set_node_status(node, "running")
+        process = subprocess.Popen(node.command())
+        self.running_jobs.append({"handle" : process, "node" : node)
 
     def resolve_node(self, node, status):
-        pass
+        resolution = "finished" if status == 0 else "error"
+        self.db.set_node_status(node, resolution)
+        if status == 0:
+            self.db.resolve_node_dependencies(node)
+
 
     def check_on_running_processes(self):
         for process in self.running_jobs:
@@ -36,7 +42,7 @@ class WorkflowRunner(object):
             else:
                 self.resolve_node(process["node"], status)
         self.start_available_nodes()
-        time.sleep(300)
+        time.sleep(3)
 
 
 if __name__ == "__main__":
