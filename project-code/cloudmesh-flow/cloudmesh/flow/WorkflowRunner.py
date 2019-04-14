@@ -22,13 +22,14 @@ class WorkflowRunner(object):
             self.running = len(self.running_jobs) > 0
 
     def start_node(self, node):
-        self.db.set_node_status(node, "running")
-        process = subprocess.Popen(node.command())
-        self.running_jobs.append({"handle" : process, "node" : node)
+        self.db.set_node_status(node.name, "running")
+        print("running command", node.get_command())
+        process = subprocess.Popen(node.get_command())
+        self.running_jobs.append({"handle" : process, "node" : node})
 
     def resolve_node(self, node, status):
         resolution = "finished" if status == 0 else "error"
-        self.db.set_node_status(node, resolution)
+        self.db.set_node_status(node.name, resolution)
         if status == 0:
             self.db.resolve_node_dependencies(node)
 

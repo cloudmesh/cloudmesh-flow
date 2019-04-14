@@ -52,8 +52,15 @@ class WorkFlowDB(object):
     def add_edge(self, node, depends_on):
         self.collection.update_one({"name" : node}, {"$push" : {"dependencies" : depends_on}})
 
+    def _node_from_db(self, db_obj):
+        reconstructed = Node(db_obj["name"])
+        reconstructed.workflow = self.workflow_name
+        reconstructed.dependencies = db_obj["dependencies"]
+        reconstructed.status = db_obj.get("status", "pending")
+        return reconstructed
+
     def get_node(self, name=None):
-        return self.collection.find_one({"name" : name})
+        return self._node_from_db(self.collection.findOne({"name" : name}))
 
     def list(self, node=None, edge=None):
         return self.collection.find({})
@@ -62,7 +69,8 @@ class WorkFlowDB(object):
         return self.collection.update_one({"name" : node}, {"$set" : {"status" : status}})
 
     def find_root_nodes(self):
-        return self.collection.find({"dependencies.0" : {"$exists" : False}})
+        root_nodes = self.collection.find({"dependencies.0" : {"$exists" : False}})
+        return [self._node_from_db(node) for node in root_nodes]
 
     def resolve_node_dependency(self, name=None):
         return self.collection.update_many({"dependencies" : name}, {"$pull" : {"dependencies" : name}})
@@ -82,8 +90,6 @@ class WorkFlowDB(object):
 class WorkFlow(object):
     def __init__(self, name, flowstring):
 
-        self.SPLIT_CHARS = ["\|", "&", ";"]
-        self.SPLIT_RE = re.compile("|".join(self.SPLIT_CHARS))
 
         self.flowstring = flowstring
         nodes = self.SPLIT_RE.split(flowstring)
@@ -108,16 +114,6 @@ class WorkFlow(object):
         self.database.add_edge(flow_nodes[0], flow_nodes[1])
     def __repr__(self):
         return " ".join([self.name, self.flowstring])
-
-    def run(self):
-        collection = self.database.collection("workflow")
-        initial_nodes = collection.find(
-            {"workflow": self.name, "dependencies.0": {"$exists": False}})
-        for initial_node in initial_nodes:
-            self.run_node(initial_node)
-
-    def run_node(self, node):
-        print("running node", node)
 
 class FlowConstructor(Visitor):
     def flownode(self, val):
@@ -157,7 +153,6 @@ if __name__ == "__main__":
     flow.flowname = flowname
     flow.visit(tree)
     db.start_flow()
-        
     #pydot__tree_to_png(tree, "ee.png")
 
     #flow = WorkFlow(flowname, flowstring)
