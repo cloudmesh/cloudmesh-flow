@@ -2,7 +2,7 @@ from __future__ import print_function
 from cloudmesh.shell.command import command
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.flow.api.manager import Manager
-from cloudmesh.flow.WorkFlow import WorkFlow, WorkflowDB
+from cloudmesh.flow.WorkFlow import WorkFlow, WorkFlowDB
 
 
 class FlowCommand(PluginCommand):
@@ -14,50 +14,54 @@ class FlowCommand(PluginCommand):
         ::
 
           Usage:
-                flow list
-                flow add [--name=NAME] --file=FILENAME
-                flow run [--name=NAME] [--log=LOG]
-                flow run --file=FILENAME [--log=LOG]
-                flow node add NODENAME NAME
-                flow edge add FROM TO NAME
+                flow list [--flowname=NAME]
+                flow add [--flowname=NAME] --flowfile=FILENAME
+                flow run [--flowname=NAME]
+                flow run --flowfile=FILENAME
+                flow node add NODE NODENAME
+                flow edge add FROM TO FLOWNAME
 
           This command manages and executes workflows
+          The default workflow is just named "workflow" but you can specify multiple
 
           Arguments:
               NAME       the name of the workflow
               FILENAME   a file name
               NODENAME   the name of the node
-              FROM       the edge source
-              TO         the edge destinationi
+              FROM       the edge source (a node name)
+              TO         the edge destination (a node name)
 
           Options:
-              -f      specify the file
+              --file    specify the file
+              --name    specify the name of the workflow (otherwise default is workflow)
+              --log     specify the log file
 
         """
 
-        print(arguments)
-
-        m = Manager()
-        db = WorkflowDb()
+        print("greetings!!!", arguments)
+        DEFAULT_FLOW = "workflow"
         if arguments.NODE and arguments.add:
-            node = arguments.NODENAME
-            add_node(node)
-            print(node)
+            node = Node(arguments.NODENAME)
+            flow = DEFAULT_FLOW
+            if arguments.NAME:
+                flow = arguments.NAME
+            node.workflow = flow
+            db = WorkFlowDB(flow)
+            db.add_node(node.to_dict())
         elif arguments.list:
-            print("option b")
-            m.list("just calling list without parameter")
+            flow = DEFAULT_FLOW
+            if arguments.NAME:
+                flow = arguments.NAME
+            db = WorkFlowDB(flow)
+            nodes = db.list_nodes()
+            for node in nodes:
+                print(node)
+        elif arguments.edge and arguments.add:
+            source = arguments.FROM
+            dest = arguments.TO
+            flow = DEFAULT_FLOW
+            if arguments.NAME:
+                flow = arguments.NAME
+            db = WorkFlowDB(flow)
+            db.add_edge(source, dest)
 
-        def add_node(node):
-            print("adding a node", node)
-            new_node = Node(node)
-            db.add_node(node)
-             
-
-        def add_dep(node1, node2):
-            db.add_edge(node1, node2)
-
-        def parse_flow_string(string):
-            flow = Workflow("workflow", string)
-
-        def generate_flow_string():
-            pass
