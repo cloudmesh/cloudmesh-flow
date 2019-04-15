@@ -65,15 +65,26 @@ class WorkFlowDB(object):
     def list(self, node=None, edge=None):
         return self.collection.find({})
 
+    def list_nodes(self):
+        return [self._node_from_db(node) for node in self.list()]
+
+    def list_edges(self):
+        return self.collection.aggregate([{"$unwind" : "dependecies"}, {"$project" : {"to" : "$name", "from" : "$dependecies"}}])
+
     def list_all_workflows(self):
         all_colls = self.database.collections()
         return [name for name in all_colls if "flow" in name and "active" not in name]
+    
     def set_node_status(self, node, status):
         return self.collection.update_one({"name" : node}, {"$set" : {"status" : status}})
 
     def find_root_nodes(self):
-        root_nodes = self.collection.find({"dependencies.0" : {"$exists" : False}})
+        root_nodes = self.collection.find({"dependencies.0" : {"$exists" : False}, "status" : "pending"})
         return [self._node_from_db(node) for node in root_nodes]
+    
+    def switch_to_active_flow(self):
+        started_collection = f"{self.workflow_name}-flow-active"
+        self.collection = self.database.collection(started_collection)
 
     def resolve_node_dependency(self, name=None):
         return self.collection.update_many({"dependencies" : name}, {"$pull" : {"dependencies" : name}})
@@ -82,9 +93,8 @@ class WorkFlowDB(object):
         pass
 
     def start_flow(self):
-        started_collection_name = f"{self.workflow_name}-flow-active"
         self.collection.aggregate([{"$project" : {"dependencies" :1, "cm" :1, "kind" : 1, "cloud" : 1, "name" : 1, "status" : "pending"}}, {"$out" : started_collection_name}])
-        self.collection = self.database.collection(started_collection_name)
+        self.switch_to_active_flow()
 
     def add_graph(self, yamlfile):
         pass
