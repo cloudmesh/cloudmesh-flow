@@ -65,6 +65,9 @@ class WorkFlowDB(object):
     def list(self, node=None, edge=None):
         return self.collection.find({})
 
+    def list_all_workflows(self):
+        all_colls = self.database.collections()
+        return [name for name in all_colls if "flow" in name and "active" not in name]
     def set_node_status(self, node, status):
         return self.collection.update_one({"name" : node}, {"$set" : {"status" : status}})
 
@@ -142,17 +145,29 @@ class FlowConstructor(Visitor):
             print("join", lhs_node_name, "with", rhs_node_name, "in type", join_type)
             self.db.add_edge(lhs_node_name, rhs_node_name)
 
-if __name__ == "__main__":
-    flowstring = sys.argv[2]
-    flowname = sys.argv[1]
+
+def parse_string_to_workflow(flowstring, flowname):
     tree = parser.parse(flowstring)
-    print(tree.pretty())
     db = WorkFlowDB(flowname)
     flow = FlowConstructor()
     flow.db = db
     flow.flowname = flowname
     flow.visit(tree)
-    db.start_flow()
+
+def parse_yaml_to_workflow(yaml_file):
+    with open(yaml_file) as yaml_contents:
+        pass
+
+
+if __name__ == "__main__":
+    flowstring = sys.argv[2]
+    flowname = sys.argv[1]
+    db = WorkFlowDB()
+    flows = db.list_all_workflows()
+    for flow in flows:
+        print(flow)
+    parse_string_to_workflow(flowstring, flowname)
+    
     #pydot__tree_to_png(tree, "ee.png")
 
     #flow = WorkFlow(flowname, flowstring)
