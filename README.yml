@@ -9,3 +9,5 @@ project:
   - title: TBD
     url: TBD
     code: TBD
+    pytest:
+      - TBD
