@@ -11,19 +11,33 @@ import os
 from cloudmesh.common.ConfigDict import ConfigDict
 from cloudmesh.common.util import HEADING
 from cloudmesh.flow import WorkFlowDB
+from cloudmesh.flow import Node
 
 import pytest
 
 @pytest.mark.incremental
 class Test_flowdb:
 
-    # noinspection PyPep8Naming
     def tearDown(self):
         pass
 
-    def test_create(self):
-        a = 1
-        print()
-        print("hello world",a)
-        print()
-        assert a==1 
+    @pytest.fixture(scope="session")
+    def db(self):
+        return WorkFlowDB("test")
+    def test_create( db):
+        assert 0, db
+
+    def test_add_node(db):
+        test_node = Node("test test")
+        db.add_node(test_node)
+        num_nodes = db.collection.count()
+        assert num_nodes == 1
+
+    def test_add_edge(db):
+        node_1 = Node("testsource")
+        node_2 = Node("testdest")
+        db.add_node(node_1)
+        db.add_node(node_2)
+        db.add_edge(node_1.name, node_2.name)
+        deps = db.collection.count({"dependencies.0" : {"$exists" : True}})
+        assert deps == 1
