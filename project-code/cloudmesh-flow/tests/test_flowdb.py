@@ -20,25 +20,21 @@ class Test_flowdb:
 
     def tearDown(self):
         pass
-    
+
     def setup(self):
         self.db = WorkFlowDB("test")
 
-
-    def test_create( self):
-        assert 0, self.db
-
     def test_add_node(self):
         test_node = Node("test test")
-        self.db.add_node(test_node)
+        self.db.add_node(test_node.toDict())
         num_nodes = self.db.collection.count()
         assert num_nodes == 1
 
     def test_add_edge(self):
         node_1 = Node("testsource")
         node_2 = Node("testdest")
-        self.db.add_node(node_1)
-        self.db.add_node(node_2)
+        self.db.add_node(node_1.toDict())
+        self.db.add_node(node_2.toDict())
         self.db.add_edge(node_1.name, node_2.name)
         deps = self.db.collection.count({"dependencies.0" : {"$exists" : True}})
         assert deps == 1
