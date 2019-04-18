@@ -1,13 +1,15 @@
 ---
 owner:
-  firstname: TBD
-  lastname: TBD
+  firstname: Robert
+  lastname: Ludwig
   hid: sp19-516-129
   community: e516
   semester: sp19
 project:
-  - title: TBD
+  - title: Workflow
     url: TBD
     code: TBD
     pytest:
       - TBD
+section:
+ - title: ISO 27000
