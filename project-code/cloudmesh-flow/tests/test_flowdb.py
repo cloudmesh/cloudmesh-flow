@@ -38,3 +38,29 @@ class Test_flowdb:
         self.db.add_edge(node_1.name, node_2.name)
         deps = self.db.collection.count({"dependencies.0" : {"$exists" : True}})
         assert deps == 1
+
+    def test_set_node_status(self):
+        node_name = "status_test"
+        status = "testing"
+        node_1 = Node(node_name)
+        self.db.add_node(node_1.toDict())
+        inserted_node = self.db.get_node(node_name)
+        print(inserted_node.status)
+        self.db.set_node_status(node_name, status)
+        reset_node = self.db.get_node(node_name)
+        assert reset_node.status == status
+
+    def test_start_flow(self):
+        self.db.collection.remove({})
+        node_1 = Node("node1")
+        node_2 = Node("node2")
+        node_3 = Node("node3")
+        node_1.add_dependency("node2")
+        for node in [node_1, node_2, node_3]:
+            self.db.add_node(node.toDict())
+        self.db.start_flow()
+        new_collection = self.db.collection
+        new
+        new_nodes = self.db.list_nodes()
+        for node in new_nodes:
+            print(node.status)

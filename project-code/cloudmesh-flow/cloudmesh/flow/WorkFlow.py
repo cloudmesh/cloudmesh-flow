@@ -64,7 +64,10 @@ class WorkFlowDB(object):
         return self._node_from_db(self.collection.findOne({"name" : name}))
 
     def list(self, node=None, edge=None):
-        return self.collection.find({})
+        query = {}
+        if node:  query["name"] = node
+        if edge: query["dependencies"] = edge
+        return self.collection.find(query)
 
     def list_nodes(self):
         return [self._node_from_db(node) for node in self.list()]
