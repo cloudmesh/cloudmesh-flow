@@ -1,8 +1,12 @@
 # ISO 27000 standards
 The ISO 27000 family of standards deal with information security. Most cloud vendors incorporate ISO 27000 compliance into their overall security strategy. The standard defines the requirements for an information security management system (ISMS) including how to put such a system in place, ensure that procedures are followed, and update security procedures as new threats are released. 
 
-In 2006, the original publication defining security standards was released as ISO 27001. Over the next few years, security analysts and researchers argued that while the 27001 standard was a good start, the requirements it laid out were inadequate to meet the security demands of a large organization. As a result, ISO 27001 grew into what are now referred to as the ISO 27000 (or ISO 27k) family of standards. The family was first published 2013 and the most recent revision was in 2018. The full list of standards in the ISO 27k family is as follows:
+In 2006, the original publication defining security standards was released as ISO 27001. Over the next few years, security analysts and researchers argued that while the 27001 standard was a good start, the requirements it laid out were inadequate to meet the security demands of a large organization. As a result, ISO 27001 grew into what are now referred to as the ISO 27000 (or ISO 27k) family of standards. The family was first published 2013 and the most recent revision was in 2018. 
 
+## Contents
+As with most ISO standards, the full text of the standard itself is not freely available to the public. The contents are available for purchase on the ISO [website](https://www.iso.org/obp/ui/#iso:std:iso-iec:27001:ed-2:v1:en) along with a small free sample.
+
+A summary of the contents is as follows:
 | Standard      | Description |
 | ----------- | ----------- |
 | ISO 27000      | Provides an overview of security requirements in the following standards, defines common terms       |
@@ -17,7 +21,17 @@ In 2006, the original publication defining security standards was released as IS
 | ISO 27034   | Application security specific guidelines        |
 | ISO 27035- 43   | Incident response & management        |
 
+## ISO 27k In Practice
+While most cloud vendors and many smaller enterprises advertise their ISO 27000 compatibility, it can be difficult to determine what that means in practice. In general, a compliant organization has a written ISMS Security Policy that implements the relevant ISO guidelines, along with both internal and external audits that ensure their compliance with the policy.
 
-## Contents
-As with most ISO standards, the full text of the standard itself is not freely available to the public. The contents are available for purchase on the ISO [website](https://www.iso.org/obp/ui/#iso:std:iso-iec:27001:ed-2:v1:en) along with a small free sample.
+### Networking Requirements
+The standard 
+
+### Cryptographic Requirements
+
+### Device Requirements
+
+### Other Requirements
+
+Finally, the standard requires that the ISMS implementation be continually monitored and updated. Security requirements are constantly changing, and the standard itself changes with some frequency as the threat landscape changes. Compliant organizations must monitor
 
