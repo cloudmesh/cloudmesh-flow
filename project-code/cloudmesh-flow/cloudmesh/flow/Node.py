@@ -14,8 +14,9 @@ class Node(object):
     def workflow_filename(self):
         return f"flow-{self.workflow}.py"
     
-    def get_command(self):
-        return ["python", self.workflow_filename(), self.name]
+    def get_command(self, filename=None):
+        if not filename: filename = self.workflow_filename()
+        return ["python", filename, self.name]
 
     def __repr__(self):
         return self.name

@@ -5,12 +5,3 @@ class Manager(object):
     def list(self, parameter):
         print("list", parameter)
 
-
-'''
-       list
-       add [--name=NAME] --file=FILENAME
-       run [--name=NAME] [--log=LOG]
-       run --file=FILENAME [--log=LOG]
-       node add NODENAME NAME
-       edge add FROM TO NAME
-'''

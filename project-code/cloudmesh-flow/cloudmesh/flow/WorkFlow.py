@@ -104,34 +104,6 @@ class WorkFlowDB(object):
         pass
 
 
-class WorkFlow(object):
-    def __init__(self, name, flowstring):
-
-
-        self.flowstring = flowstring
-        nodes = self.SPLIT_RE.split(flowstring)
-        pprint(nodes)
-        flow_nodes = []
-        self.database = WorkFlowDB(name)
-        self.name = name
-        self.node_names = []
-        for node in nodes:
-            node_name = node.replace(" ", "")
-            flow_node = Node(node_name)
-            self.node_names.append(node_name)
-            flow_node.workflow = name
-            print(flow_node)
-            flow_nodes.append(flow_node)
-            self.database.add_node(flow_node.toDict())
-        for token in flowstring.split(" "):
-            if token in self.node_names:
-                print("token is a node", token)
-            else:
-                print("token is an edge", token)
-        self.database.add_edge(flow_nodes[0], flow_nodes[1])
-    def __repr__(self):
-        return " ".join([self.name, self.flowstring])
-
 class FlowConstructor(Visitor):
     def flownode(self, val):
         print("node", val,  val.children[0])
