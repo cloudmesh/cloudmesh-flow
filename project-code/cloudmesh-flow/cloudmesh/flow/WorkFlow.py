@@ -45,6 +45,7 @@ class WorkFlowDB(object):
 
     @DatabaseUpdate()
     def add_node(self, node):
+        print("adding a node", node, self.collection)
         name = node["name"]
         node.update(self.attributes(name))
         return node
