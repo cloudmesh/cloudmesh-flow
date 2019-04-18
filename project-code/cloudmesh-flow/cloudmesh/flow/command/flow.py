@@ -1,9 +1,9 @@
 from __future__ import print_function
 from cloudmesh.shell.command import command
 from cloudmesh.shell.command import PluginCommand
-from cloudmesh.flow.api.manager import Manager
 from cloudmesh.flow.WorkFlow import WorkFlow, WorkFlowDB
-
+from cloudmesh.DEBUG import VERBOSE
+from cloudmesh.flow.Node import Node
 
 class FlowCommand(PluginCommand):
 
@@ -14,9 +14,9 @@ class FlowCommand(PluginCommand):
         ::
 
           Usage:
-                flow list [--flowname=NAME]
-                flow add [--flowname=NAME] --flowfile=FILENAME
-                flow run [--flowname=NAME]
+                flow list [--flowname=FLOWNAME]
+                flow add [--flowname=FLOWNAME] --flowfile=FILENAME
+                flow run [--flowname=FLOWNAME]
                 flow run --flowfile=FILENAME
                 flow node add NODE NODENAME
                 flow edge add FROM TO FLOWNAME
@@ -30,38 +30,35 @@ class FlowCommand(PluginCommand):
               NODENAME   the name of the node
               FROM       the edge source (a node name)
               TO         the edge destination (a node name)
+              NODE       the name of the node
 
           Options:
               --file    specify the file
               --name    specify the name of the workflow (otherwise default is workflow)
               --log     specify the log file
+              --flowname=FLOWNAME   the name or the workflow
 
         """
 
-        print("greetings!!!", arguments)
-        DEFAULT_FLOW = "workflow"
-        if arguments.NODE and arguments.add:
+        arguments.FLOWNAME = arguments["--flowname"] or "workflow"
+        VERBOSE(arguments)
+
+        if arguments.add and arguments.NODE:
+
             node = Node(arguments.NODENAME)
-            flow = DEFAULT_FLOW
-            if arguments.NAME:
-                flow = arguments.NAME
-            node.workflow = flow
-            db = WorkFlowDB(flow)
+            node.workflow = arguments.FLOWNAME
+            db = WorkFlowDB(arguments.FLOWNAME)
             db.add_node(node.to_dict())
+
         elif arguments.list:
-            flow = DEFAULT_FLOW
-            if arguments.NAME:
-                flow = arguments.NAME
-            db = WorkFlowDB(flow)
+
+            db = WorkFlowDB(arguments.FLOWNAME)
             nodes = db.list_nodes()
             for node in nodes:
                 print(node)
+
         elif arguments.edge and arguments.add:
-            source = arguments.FROM
-            dest = arguments.TO
-            flow = DEFAULT_FLOW
-            if arguments.NAME:
-                flow = arguments.NAME
-            db = WorkFlowDB(flow)
-            db.add_edge(source, dest)
+
+            db = WorkFlowDB(arguments.FLOWNAME)
+            db.add_edge(arguments.FROM, arguments.TO)
 
