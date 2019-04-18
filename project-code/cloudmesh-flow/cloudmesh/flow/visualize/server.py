@@ -1,8 +1,6 @@
 
-from flask import Flask, jsonify, render_template, render_template_string
-from flask_restful import Api, Resource, reqparse
 import connexion
-import oyaml as yaml
+from flask import render_template
 
 app = connexion.App(__name__, specification_dir="./")
 

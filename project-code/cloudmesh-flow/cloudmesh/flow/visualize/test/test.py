@@ -1,11 +1,12 @@
-import js2py
-
+import json
+import os
 
 import oyaml as yaml
 import requests
-from flask import jsonify
-import json
-import os
+from cloudmesh.flow.WorkFlow import WorkFlowDB
+
+mydb = WorkFlowDB()
+all_workflows = mydb.list_all_workflows()
 
 workflows = []
 for (dirpath, dirnames, filenames) in os.walk("workflows"):
