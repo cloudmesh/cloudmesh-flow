@@ -27,11 +27,16 @@ While most cloud vendors and many smaller enterprises advertise their ISO 27000 
 ### Networking Requirements
 The standard lays out very specific guidelines for networking, as well as best practices. These cover networks that are used by cloud applications, as well as in-house networks that are used by employees. Security is an "essential element" of networks, and must be incorporated as such.
 
-For applications, networks should be hardened as much as permissible. Where possible based on application, firewalls and whitelists are recommended to limit the attack surface. 
+For applications, networks should be hardened as much as permissible. Where possible based on application, firewalls and whitelists are recommended to limit the attack surface. Sending information in plain text without encryption is discouraged, and HTTPS/TLS is strongly encouraged.
 
 For in-house networks, the standard recommends many best practices for ensuring that security is not compromised in trying to make a user-friendly network. Networks should be segregated, and users should be limited in what they can access without identifying themselves in a specific role. Trust based on networks is to be avoided, for example a VPN by itself is not a sufficient security solution.
 
 ### Cryptographic Requirements
+Implementing good cryptography can be tricky, and ensuring you're following best practices closely is very important for complying with the standard.
+
+In general, the best practice recommended by the standard is to encrypt as much as possible given the risk profile of the organization. There should be a documented policy to understand what information should be encrypted and how it is encrypted. Because security standards are frequently changing, organizations should document what levels of encryption to use and update those recommendations as the threat landscape changes.
+
+Key management is also important. Documenting and understanding what to do with sensitive files like private keys is an important part of the standard. It's also important to ensure that keys are generated in a random way, and that weak keys aren't used. Because keys contain potentially sensitive information, they should be destroyed when no longer needed.
 
 ### Device Requirements
 
