@@ -22,8 +22,8 @@ class Test_flowrunner:
         pass
 
     def test_create(self):
-        a = 1
-        print()
-        print("hello world",a)
-        print()
-        assert a==1 
+        runner = WorkflowRunner("test")
+
+    def test_run(self):
+        runner = WorkflowRunner("test")
+        runner.start_flow()

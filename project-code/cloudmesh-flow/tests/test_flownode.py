@@ -10,7 +10,7 @@ import os
 
 from cloudmesh.common.ConfigDict import ConfigDict
 from cloudmesh.common.util import HEADING
-from cloudmesh.flow import Node
+from cloudmesh.flow.Node import Node
 
 import pytest
 
