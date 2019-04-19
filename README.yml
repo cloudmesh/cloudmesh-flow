@@ -7,9 +7,9 @@ owner:
   semester: sp19
 project:
   - title: Workflow
-    url: TBD
-    code: TBD
+    url: https://github.com/cloudmesh-community/sp19-516-129/blob/master/project-code/cloudmesh-flow/README.md
+    code: https://github.com/cloudmesh-community/sp19-516-129/blob/master/project-code/
     pytest:
-      - TBD
+      - https://github.com/cloudmesh-community/sp19-516-129/tree/master/project-code/cloudmesh-flow/tests
 section:
  - title: ISO 27000
