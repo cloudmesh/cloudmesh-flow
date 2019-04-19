@@ -17,6 +17,7 @@ class WorkflowRunner(object):
         
     def start_flow(self):
         self.running = True
+        self.db.start_flow()
         self.start_available_nodes()
         while(self.running):
             self.check_on_running_processes()

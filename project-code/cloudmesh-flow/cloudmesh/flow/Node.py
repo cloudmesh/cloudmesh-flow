@@ -20,4 +20,4 @@ class Node(object):
         return ["python", filename, self.name]
 
     def __repr__(self):
-        return f"Flownode name:{self.name} dependencies:{self.dependencies}"
+        return f"Node name:{self.name} dependencies:{self.dependencies}"
