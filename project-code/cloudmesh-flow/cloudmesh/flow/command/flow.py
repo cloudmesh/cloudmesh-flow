@@ -41,7 +41,10 @@ class FlowCommand(PluginCommand):
         arguments.FLOWFILE = arguments["--flowfile"] or f"{arguments.FLOWNAME}-flow.py"
         VERBOSE(arguments)
         print("greetings!!!", arguments)
-        if arguments["add"]:
+        if arguments["add"] and arguments.edge:
+            db = WorkFlowDB(arguments.FLOWNAME)
+            db.add_edge(arguments.FROM, arguments.TO)
+        elif arguments["add"]:
             print("adding a node")
             if arguments.NODENAME:
                 node = Node(arguments.NODENAME)
@@ -62,9 +65,6 @@ class FlowCommand(PluginCommand):
             nodes = db.list_nodes()
             for node in nodes:
                 print(node)
-        elif arguments.edge and arguments["add"]:
-            db = WorkFlowDB(arguments.FLOWNAME)
-            db.add_edge(arguments.FROM, arguments.TO)
         elif arguments.run:
             runner = WorkflowRunner(arguments.FLOWNAME, arguments.FLOWFILE)
             runner.start_flow()
