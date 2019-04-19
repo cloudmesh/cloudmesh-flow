@@ -7,6 +7,7 @@ from cloudmesh.flow.Node import Node
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
 from lark import Lark, Visitor
 from lark.tree import pydot__tree_to_png
+import oyaml as yaml
 
 grammar = """
     flownode: /[a-zA-Z]+/
@@ -144,7 +145,10 @@ def parse_string_to_workflow(flowstring, flowname):
 
 def parse_yaml_to_workflow(yaml_file):
     with open(yaml_file) as yaml_contents:
-        pass
+        data = yaml.load(yaml_contents)
+        flowstring = data["flow"]
+        flowname = data["name"]
+        return parse_string_to_workflow(flowstring, flowname)
 
 
 if __name__ == "__main__":

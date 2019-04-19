@@ -38,8 +38,6 @@ In general, the best practice recommended by the standard is to encrypt as much 
 
 Key management is also important. Documenting and understanding what to do with sensitive files like private keys is an important part of the standard. It's also important to ensure that keys are generated in a random way, and that weak keys aren't used. Because keys contain potentially sensitive information, they should be destroyed when no longer needed.
 
-### Device Requirements
-
 
 ### Other Requirements
 While much of the standard discusses computers and computing equipment, there are also sections devoted to human resources. It is recommended that background checks be performed on employees, and other documented screening for potential bad behaviors. Ongoing personnel training is recommended, and employees are expected to assess the security impact of their work. Finally, an auditable process for removing sensitive information from terminated employees is required.
