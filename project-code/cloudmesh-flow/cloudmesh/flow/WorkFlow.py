@@ -29,8 +29,8 @@ class WorkFlowDB(object):
     def __init__(self, name="workflow"):
         self.database = CmDatabase()
         self.workflow_name = name
-        print("made a db!")
         self.collection = self.database.collection(f"{name}-flow")
+        print("made a db!", self.collection)
 
     def attributes(self, name):
         data = {
