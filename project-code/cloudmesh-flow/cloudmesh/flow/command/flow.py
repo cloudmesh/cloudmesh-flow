@@ -49,10 +49,8 @@ class FlowCommand(PluginCommand):
                     db = WorkFlowDB(arguments.FLOWNAME)
                     db.add_node(node.toDict())
                 except Exception as e:
-                    print (e)
-
+                    print ("error executing", e)
             elif arguments["--flowfile"]:
-
                 filename = arguments["--flowfile"]
                 print("load from file", filename)
         elif arguments["list"]:
