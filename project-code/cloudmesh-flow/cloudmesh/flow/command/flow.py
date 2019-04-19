@@ -17,8 +17,8 @@ class FlowCommand(PluginCommand):
                 flow add [--flowname=FLOWNAME] --flowfile=FILENAME
                 flow run [--flowname=FLOWNAME]
                 flow run --flowfile=FILENAME
-                flow node add NODENAME
-                flow edge add FROM TO [--flowname=] FLOWNAME
+                flow node add NODENAME [--flowname=FLOWNAME]
+                flow edge add FROM TO [--flowname=FLOWNAME]
 
           This command manages and executes workflows
           The default workflow is just named "workflow" but you can specify multiple
@@ -40,12 +40,17 @@ class FlowCommand(PluginCommand):
         arguments.FLOWNAME = arguments["--flowname"] or "workflow"
         VERBOSE(arguments)
         print("greetings!!!", arguments)
-        if arguments.NODEAME and arguments.add:
-            node = Node(arguments.NODENAME)
-            node.workflow = arguments.FLOWNAME
-            print("adding a node", node)
-            db = WorkFlowDB(arguments.FLOWNAME)
-            db.add_node(node.to_dict())
+        if arguments.add:
+            print("adding a node")
+            if arguments.NODENAME:
+                node = Node(arguments.NODENAME)
+                node.workflow = arguments.FLOWNAME
+                print("adding a node", node)
+                db = WorkFlowDB(arguments.FLOWNAME)
+                db.add_node(node.to_dict())
+            elif arguments["--flowfile"]:
+                filename = arguments["--flowfile"]
+                print("load from file", filename)
         elif arguments.list:
             print("listing nodes!")
             db = WorkFlowDB(arguments.FLOWNAME)
