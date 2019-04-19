@@ -22,8 +22,19 @@ class Test_flownode:
         pass
 
     def test_create(self):
-        a = 1
-        print()
-        print("hello world",a)
-        print()
-        assert a==1 
+       mynode = Node("test")
+
+    def test_get_command(self):
+        mynode = Node("test2")
+        comm_arr = mynode.get_command()
+        assert comm_arr[0] == "python"
+        assert comm_arr[1] == "test2-flow.py"
+        assert comm_arr[2] == "test2"
+
+    def test_add_dep(self):
+        node_1 = Node("node1")
+        node_2 = Node("node2")
+        node_1.add_dependency(node_2)
+        assert len(node_1.dependencies) == 1
+
+

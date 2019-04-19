@@ -65,3 +65,4 @@ class Test_flowdb:
         new_nodes = self.db.list_nodes()
         for node in new_nodes:
             print(node.status)
+            assert node.status == "pending"
