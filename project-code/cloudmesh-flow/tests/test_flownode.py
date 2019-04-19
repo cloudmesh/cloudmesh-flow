@@ -26,8 +26,8 @@ class Test_flownode:
 
     def test_get_command(self):
         mynode = Node("test2")
-        comm_arr = mynode.get_command()
         mynode.workflow = "test2"
+        comm_arr = mynode.get_command()
         assert comm_arr[0] == "python"
         assert comm_arr[1] == "test2-flow.py"
         assert comm_arr[2] == "test2"
