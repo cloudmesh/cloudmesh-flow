@@ -49,8 +49,6 @@ class FlowCommand(PluginCommand):
         elif arguments.list:
             print("listing nodes!")
             db = WorkFlowDB(arguments.FLOWNAME)
-            flow = DEFAULT_FLOW
-            db = WorkFlowDB(flow)
             print(db.collection)
             nodes = db.list_nodes()
             for node in nodes:
