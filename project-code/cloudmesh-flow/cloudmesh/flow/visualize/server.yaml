@@ -1,0 +1,80 @@
+swagger: "2.0"
+info:
+  version: "0.0.1"
+  title: "graphvisualization"
+  description: ""
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    name: "Visualize Workflows REST Service"
+  license:
+    name: "Apache"
+host: "localhost:8080"
+basePath: "/flow"
+schemes:
+  - "http"
+consumes:
+  - "application/json"
+produces:
+  - "text/html"
+paths:
+  /monitor:
+    post:
+      operationId: render.update
+      tags:
+        - monitor
+      summary: Monitor a workflow depicted as a graph
+      description: Monitor a workflow depicted as a graph
+      parameters:
+        - name: workflow
+          in: body
+          description: Workflow to visualize
+          required: False
+          schema:
+            $ref: "#/definitions/workflow"
+      responses:
+        201:
+          description: Successfully created a digram for the workflow
+  /monitor/{workflowname}:
+    get:
+      tags:
+        - monitor
+      operationId: render.show
+      description: "It returns graph for the given workflow name."
+      parameters:
+        - name: workflowname
+          in: path
+          description: The workflow name to be shown
+          type: string
+          required: True
+      produces:
+        - "text/html"
+      responses:
+        201:
+          description: The workflow visualized
+  /list:
+    get:
+      operationId: render.getworkflownames
+      tags:
+        - monitor
+      summary: Read the entire list of workflows
+      description: Read the list of workflows
+      responses:
+        200:
+          description: Successfully read the list of workflows
+          schema:
+            type: array
+            items:
+              properties:
+                name:
+                  type: string
+
+
+definitions:
+  workflow:
+    type: "object"
+    required:
+      - "flowyaml"
+
+    properties:
+      flowyaml:
+        type: "string"
