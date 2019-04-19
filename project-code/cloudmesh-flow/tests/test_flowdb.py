@@ -56,7 +56,7 @@ class Test_flowdb:
         node_1 = Node("node1")
         node_2 = Node("node2")
         node_3 = Node("node3")
-        node_1.add_dependency("node2")
+        node_1.add_dependency(node_2)
         for node in [node_1, node_2, node_3]:
             self.db.add_node(node.toDict())
         self.db.start_flow()
