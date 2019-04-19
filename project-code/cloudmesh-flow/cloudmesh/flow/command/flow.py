@@ -1,7 +1,7 @@
 from __future__ import print_function
 from cloudmesh.shell.command import command
 from cloudmesh.shell.command import PluginCommand
-from cloudmesh.flow.WorkFlow import WorkFlow, WorkFlowDB
+from cloudmesh.flow.WorkFlow import  WorkFlowDB
 from cloudmesh.DEBUG import VERBOSE
 from cloudmesh.flow.Node import Node
 
