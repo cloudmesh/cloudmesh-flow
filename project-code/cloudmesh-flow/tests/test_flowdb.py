@@ -23,6 +23,7 @@ class Test_flowdb:
 
     def setup(self):
         self.db = WorkFlowDB("test")
+        self.db.collection.delete_many({})
 
     def test_add_node(self):
         test_node = Node("test test")
@@ -60,7 +61,7 @@ class Test_flowdb:
             self.db.add_node(node.toDict())
         self.db.start_flow()
         new_collection = self.db.collection
-        new
+        print(new_collection)
         new_nodes = self.db.list_nodes()
         for node in new_nodes:
             print(node.status)
