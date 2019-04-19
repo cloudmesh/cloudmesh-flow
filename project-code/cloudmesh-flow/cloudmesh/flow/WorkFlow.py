@@ -61,7 +61,7 @@ class WorkFlowDB(object):
         return reconstructed
 
     def get_node(self, name=None):
-        return self._node_from_db(self.collection.findOne({"name" : name}))
+        return self._node_from_db(self.collection.find_one({"name" : name}))
 
     def list(self, node=None, edge=None):
         query = {}
@@ -97,7 +97,8 @@ class WorkFlowDB(object):
         pass
 
     def start_flow(self):
-        self.collection.aggregate([{"$project" : {"dependencies" :1, "cm" :1, "kind" : 1, "cloud" : 1, "name" : 1, "status" : "pending"}}, {"$out" : started_collection_name}])
+        started_collection = f"{self.workflow_name}-flow-active"
+        self.collection.aggregate([{"$project" : {"dependencies" :1, "cm" :1, "kind" : 1, "cloud" : 1, "name" : 1, "status" : "pending"}}, {"$out" : started_collection}])
         self.switch_to_active_flow()
 
     def add_graph(self, yamlfile):
