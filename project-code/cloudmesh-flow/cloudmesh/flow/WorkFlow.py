@@ -134,6 +134,26 @@ class FlowConstructor(Visitor):
             print("join", lhs_node_name, "with", rhs_node_name, "in type", join_type)
             self.db.add_edge(lhs_node_name, rhs_node_name)
 
+    def group(self, val):
+        if len(val.children) == 1: return
+        lhs = val.children[0]
+        join = val.children[1]
+        rhs = val.children[2]
+        join_type = join.children[0].data
+        lhs_node = self.resolve_to_node(lhs)
+        rhs_node = self.resolve_to_node(rhs)
+        if join_type == "sequence":
+            lhs_node_name = lhs_node
+            rhs_node_name = rhs_node
+            print("join", lhs_node_name, "with", rhs_node_name, "in type", join_type)
+            self.db.add_edge(lhs_node_name, rhs_node_name)
+
+    def _is_node(self, val):
+        print("is node", val)
+        return True
+
+    def resolve_to_node(self, val):
+        if self._is_node(val): return val
 
 def parse_string_to_workflow(flowstring, flowname):
     tree = parser.parse(flowstring)
