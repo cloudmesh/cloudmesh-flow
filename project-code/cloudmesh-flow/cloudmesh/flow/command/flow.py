@@ -46,8 +46,13 @@ class FlowCommand(PluginCommand):
                 node = Node(arguments.NODENAME)
                 node.workflow = arguments.FLOWNAME
                 print("adding a node", node)
+
                 db = WorkFlowDB(arguments.FLOWNAME)
+
+                print("PPPPP")
                 db.add_node(node.to_dict())
+                print("OOOOO")
+
             elif arguments["--flowfile"]:
                 filename = arguments["--flowfile"]
                 print("load from file", filename)
