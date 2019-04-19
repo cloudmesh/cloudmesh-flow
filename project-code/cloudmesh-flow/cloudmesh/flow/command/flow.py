@@ -40,7 +40,7 @@ class FlowCommand(PluginCommand):
         arguments.FLOWNAME = arguments["--flowname"] or "workflow"
         VERBOSE(arguments)
         print("greetings!!!", arguments)
-        if arguments{"add"]:
+        if arguments["add"]:
             print("adding a node")
             if arguments.NODENAME:
                 node = Node(arguments.NODENAME)
