@@ -30,7 +30,6 @@ class WorkFlowDB(object):
         self.database = CmDatabase()
         self.workflow_name = name
         self.collection = self.database.collection(f"{name}-flow")
-        print("made a db!", self.collection)
 
     def attributes(self, name):
         data = {
@@ -47,7 +46,6 @@ class WorkFlowDB(object):
 
     @DatabaseUpdate()
     def add_node(self, node):
-        print("adding a node in the db", node, self.collection)
         name = node["name"]
         node.update(self.attributes(name))
         return node

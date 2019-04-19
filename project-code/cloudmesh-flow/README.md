@@ -28,9 +28,24 @@ Node "c" dependencies ["a"]
 
 ```
 #### Multiple Workflows
-Many times a user wants to have several different workflows defined. 
+Many times a user wants to have several different workflows defined. You can manage several workflows by passing the "--flowname" parameter to the `cms flow command`. For example, to add a new node in the workflow "workflow2", run
+
+`cms flow add node d --flowname=workflow2`
+
+Now you will have 2 workflows, the default one with the nodes we added earlier, and the flow "workflow2". You can see the different results by running the list command on each
+```commandline
+cms flow list
+cms flow list --flowname=workflow2
+```
 
 ### Adding A Complete Flow
+While this process works for smaller workflows, it can be tedious to add 10 or 15 tasks via the command line. You can add a flow by defining a _flowstring_, which specifies many tasks and their dependencies all at once. 
+
+A flowstring is a single string with a list of tasks, separated by either a semicolon (;) or a double pipe (||). The semicolon indicates sequential dependency and the pipe indicates parallel. A sample flowstring for the flow we defined above is
+
+`"a;c||b"`
+
+Node "a" is joined sequentially with node "c" and in parallel with node "b".
 
 #### Adding a Flow String
 
