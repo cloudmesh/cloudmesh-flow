@@ -1,7 +1,8 @@
 from __future__ import print_function
 from cloudmesh.shell.command import command
 from cloudmesh.shell.command import PluginCommand
-from cloudmesh.flow.WorkFlow import  WorkFlowDB
+from cloudmesh.flow.WorkFlow import  WorkFlowDB, parse_string_to_workflow, parse_yaml_to_workflow
+from cloudmesh.flow.WorkflowRunner import WorkflowRunner
 from cloudmesh.DEBUG import VERBOSE
 from cloudmesh.flow.Node import Node
 
@@ -15,8 +16,7 @@ class FlowCommand(PluginCommand):
           Usage:
                 flow list [--flowname=FLOWNAME]
                 flow add [--flowname=FLOWNAME] --flowfile=FILENAME
-                flow run [--flowname=FLOWNAME]
-                flow run --flowfile=FILENAME
+                flow run [--flowname=FLOWNAME] [--flowfile=FILENAME]
                 flow node add NODENAME [--flowname=FLOWNAME]
                 flow edge add FROM TO [--flowname=FLOWNAME]
 
@@ -38,6 +38,7 @@ class FlowCommand(PluginCommand):
         """
 
         arguments.FLOWNAME = arguments["--flowname"] or "workflow"
+        arguments.FLOWFILE = arguments["--flowfile"] or f"{arguments.FLOWNAME}-flow.py"
         VERBOSE(arguments)
         print("greetings!!!", arguments)
         if arguments["add"]:
@@ -53,6 +54,7 @@ class FlowCommand(PluginCommand):
             elif arguments["--flowfile"]:
                 filename = arguments["--flowfile"]
                 print("load from file", filename)
+                parse_yaml_to_workflow(filename, arguments.FLOWNAME)
         elif arguments["list"]:
             print("listing nodes!")
             db = WorkFlowDB(arguments.FLOWNAME)
@@ -63,5 +65,8 @@ class FlowCommand(PluginCommand):
         elif arguments.edge and arguments["add"]:
             db = WorkFlowDB(arguments.FLOWNAME)
             db.add_edge(arguments.FROM, arguments.TO)
+        elif arguments.run:
+            runner = WorkflowRunner(arguments.FLOWNAME, arguments.FLOWFILE)
+            runner.start_flow()
 
 
