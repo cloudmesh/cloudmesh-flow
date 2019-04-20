@@ -7,6 +7,7 @@ from cloudmesh.flow.Node import Node
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
 from lark import Lark, Visitor
 from lark.tree import pydot__tree_to_png
+import oyaml as yaml
 
 grammar = """
     flownode: /[a-zA-Z]+/
@@ -60,10 +61,13 @@ class WorkFlowDB(object):
         return reconstructed
 
     def get_node(self, name=None):
-        return self._node_from_db(self.collection.findOne({"name" : name}))
+        return self._node_from_db(self.collection.find_one({"name" : name}))
 
     def list(self, node=None, edge=None):
-        return self.collection.find({})
+        query = {}
+        if node:  query["name"] = node
+        if edge: query["dependencies"] = edge
+        return self.collection.find(query)
 
     def list_nodes(self):
         return [self._node_from_db(node) for node in self.list()]
@@ -93,44 +97,16 @@ class WorkFlowDB(object):
         pass
 
     def start_flow(self):
-        self.collection.aggregate([{"$project" : {"dependencies" :1, "cm" :1, "kind" : 1, "cloud" : 1, "name" : 1, "status" : "pending"}}, {"$out" : started_collection_name}])
+        started_collection = f"{self.workflow_name}-flow-active"
+        self.collection.aggregate([{"$project" : {"dependencies" :1, "cm" :1, "kind" : 1, "cloud" : 1, "name" : 1, "status" : "pending"}}, {"$out" : started_collection}])
         self.switch_to_active_flow()
 
     def add_graph(self, yamlfile):
         pass
 
 
-class WorkFlow(object):
-    def __init__(self, name, flowstring):
-
-
-        self.flowstring = flowstring
-        nodes = self.SPLIT_RE.split(flowstring)
-        pprint(nodes)
-        flow_nodes = []
-        self.database = WorkFlowDB(name)
-        self.name = name
-        self.node_names = []
-        for node in nodes:
-            node_name = node.replace(" ", "")
-            flow_node = Node(node_name)
-            self.node_names.append(node_name)
-            flow_node.workflow = name
-            print(flow_node)
-            flow_nodes.append(flow_node)
-            self.database.add_node(flow_node.toDict())
-        for token in flowstring.split(" "):
-            if token in self.node_names:
-                print("token is a node", token)
-            else:
-                print("token is an edge", token)
-        self.database.add_edge(flow_nodes[0], flow_nodes[1])
-    def __repr__(self):
-        return " ".join([self.name, self.flowstring])
-
 class FlowConstructor(Visitor):
     def flownode(self, val):
-        print("node", val,  val.children[0])
         name = val.children[0]
         node = Node(name)
         node.workflow = self.flowname
@@ -155,6 +131,29 @@ class FlowConstructor(Visitor):
             print("join", lhs_node_name, "with", rhs_node_name, "in type", join_type)
             self.db.add_edge(lhs_node_name, rhs_node_name)
 
+    def group(self, val):
+        if len(val.children) == 1: return
+        lhs = val.children[0]
+        join = val.children[1]
+        rhs = val.children[2]
+        join_type = join.children[0].data
+        lhs_node = self.resolve_to_node(lhs)
+        rhs_node = self.resolve_to_node(rhs)
+        if join_type == "sequence":
+            lhs_node_name = lhs_node.children[0]
+            rhs_node_name = rhs_node.children[0]
+            print("join", lhs_node_name, "with", rhs_node_name, "in type", join_type)
+            self.db.add_edge(lhs_node_name, rhs_node_name)
+
+    def _is_node(self, val):
+        print("is node", val.data)
+        return val.data == "flownode"
+
+    def resolve_to_node(self, val):
+        if self._is_node(val): return val
+        else:
+            print(val.data, val.children)
+            return self.resolve_to_node(val.children[0])
 
 def parse_string_to_workflow(flowstring, flowname):
     tree = parser.parse(flowstring)
@@ -166,7 +165,10 @@ def parse_string_to_workflow(flowstring, flowname):
 
 def parse_yaml_to_workflow(yaml_file):
     with open(yaml_file) as yaml_contents:
-        pass
+        data = yaml.load(yaml_contents)
+        flowstring = data["flow"]
+        flowname = data["name"]
+        return parse_string_to_workflow(flowstring, flowname)
 
 
 if __name__ == "__main__":

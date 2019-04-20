@@ -1,7 +1,8 @@
 from __future__ import print_function
 from cloudmesh.shell.command import command
 from cloudmesh.shell.command import PluginCommand
-from cloudmesh.flow.WorkFlow import WorkFlow, WorkFlowDB
+from cloudmesh.flow.WorkFlow import  WorkFlowDB, parse_string_to_workflow, parse_yaml_to_workflow
+from cloudmesh.flow.WorkflowRunner import WorkflowRunner
 from cloudmesh.DEBUG import VERBOSE
 from cloudmesh.flow.Node import Node
 
@@ -12,14 +13,12 @@ class FlowCommand(PluginCommand):
     def do_flow(self, args, arguments):
         """
         ::
-
           Usage:
                 flow list [--flowname=FLOWNAME]
                 flow add [--flowname=FLOWNAME] --flowfile=FILENAME
-                flow run [--flowname=FLOWNAME]
-                flow run --flowfile=FILENAME
-                flow node add NODE NODENAME
-                flow edge add FROM TO FLOWNAME
+                flow run [--flowname=FLOWNAME] [--flowfile=FILENAME]
+                flow node add NODENAME [--flowname=FLOWNAME]
+                flow edge add FROM TO [--flowname=FLOWNAME]
 
           This command manages and executes workflows
           The default workflow is just named "workflow" but you can specify multiple
@@ -34,31 +33,40 @@ class FlowCommand(PluginCommand):
 
           Options:
               --file    specify the file
-              --name    specify the name of the workflow (otherwise default is workflow)
               --log     specify the log file
               --flowname=FLOWNAME   the name or the workflow
-
         """
 
         arguments.FLOWNAME = arguments["--flowname"] or "workflow"
+        arguments.FLOWFILE = arguments["--flowfile"] or f"{arguments.FLOWNAME}-flow.py"
         VERBOSE(arguments)
-
-        if arguments.add and arguments.NODE:
-
-            node = Node(arguments.NODENAME)
-            node.workflow = arguments.FLOWNAME
+        print("greetings!!!", arguments)
+        if arguments["add"] and arguments.edge:
             db = WorkFlowDB(arguments.FLOWNAME)
-            db.add_node(node.to_dict())
-
-        elif arguments.list:
-
+            db.add_edge(arguments.FROM, arguments.TO)
+        elif arguments["add"]:
+            print("adding a node")
+            if arguments.NODENAME:
+                node = Node(arguments.NODENAME)
+                node.workflow = arguments.FLOWNAME
+                try:
+                    db = WorkFlowDB(arguments.FLOWNAME)
+                    db.add_node(node.toDict())
+                except Exception as e:
+                    print ("error executing", e)
+            elif arguments["--flowfile"]:
+                filename = arguments["--flowfile"]
+                print("load from file", filename)
+                parse_yaml_to_workflow(filename, arguments.FLOWNAME)
+        elif arguments["list"]:
+            print("listing nodes!")
             db = WorkFlowDB(arguments.FLOWNAME)
+            print(db.collection)
             nodes = db.list_nodes()
             for node in nodes:
                 print(node)
+        elif arguments.run:
+            runner = WorkflowRunner(arguments.FLOWNAME, arguments.FLOWFILE)
+            runner.start_flow()
 
-        elif arguments.edge and arguments.add:
-
-            db = WorkFlowDB(arguments.FLOWNAME)
-            db.add_edge(arguments.FROM, arguments.TO)
 

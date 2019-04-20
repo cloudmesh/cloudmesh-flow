@@ -3,10 +3,11 @@ import subprocess
 import time
 
 class WorkflowRunner(object):
-    def __init__(self, flowname):
+    def __init__(self, flowname, filename = None):
         self.flowname = flowname
         self.db = WorkFlowDB(flowname)
         self.running_jobs = []
+        self.filename = filename or f"{flowname}-flow.py"
 
     def start_available_nodes(self):
         available_nodes = self.db.find_root_nodes()
@@ -16,6 +17,7 @@ class WorkflowRunner(object):
         
     def start_flow(self):
         self.running = True
+        self.db.start_flow()
         self.start_available_nodes()
         while(self.running):
             self.check_on_running_processes()
