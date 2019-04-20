@@ -73,6 +73,8 @@ The visualization service will then be available at the address `http://127.0.0.
 At the address `http://127.0.0.1:8080/flow/`, you can find the list of all the submitted workflows. By selecting a workflow you can 
 view a visualization of the workflow. 
 
+A node in a visualization has a color. The color represents the status of the task associated with the node. If the task is pending for execution, its color will be `blue` otherwise the color is `green`.
+
 ## Refernces
 
 * THis work is influenced by <https://github.com/cloudmesh/workflow>
