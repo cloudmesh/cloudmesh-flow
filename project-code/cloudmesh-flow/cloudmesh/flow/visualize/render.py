@@ -23,13 +23,16 @@ def show(workflowname):
     nodes = []
     edges = []
 
-    nodes.append({'id': 'start', 'label': 'start'})
-    nodes.append({'id': 'end', 'label': 'end'})
+    nodes.append({'id': 'start', 'label': 'start', 'color' : 'yellow'})
+    nodes.append({'id': 'end', 'label': 'end', 'color' : 'indigo', 'font': {'color':'white'}})
 
     to_end_nodes = [x.name for x in tasks]
 
     for task in tasks:
-        nodes.append({'id': task.name, 'label': task.name})
+        color = 'green'
+        if task.status == "pending":
+            color = 'blue'
+        nodes.append({'id': task.name, 'label': task.name, 'color': color})
         if len(task.dependencies) == 0:
             edges.append({'from': 'start', 'to': task.name, "arrows": 'to'})
         for dependency in task.dependencies:
