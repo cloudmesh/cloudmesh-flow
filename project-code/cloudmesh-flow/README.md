@@ -1,12 +1,11 @@
 # Workflow Management
 
-This is a tool for managing workflows in a cloudmesh context. A
+Cloudmesh includes a simple tool for managing workflows. A cloudmesh
 *workflow* is a set of Python functions (that we call tasks or nodes)
-that need to be run together, some in sequence and some in
-parallel. This tool allows you to define workflows, indicate how they
-should be run, and run them. You can also visualize your workflows,
-including the current status of nodes that are running, and the
-dependency network between them.
+that form the workflow. The tasks can have dependencies.  Thus, some
+may be run in sequence and some in parallel. You can visualize your
+workflows, including the monitoring the current status of the tasks,
+and the dependency network between them.
 
 ## Getting Started
 
