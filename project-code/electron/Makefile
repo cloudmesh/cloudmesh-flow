@@ -1,5 +1,6 @@
 install:
-	npm install -g npm
+	npm install js-yaml
+	npm install mongodb
 	npm install
 
 run:
