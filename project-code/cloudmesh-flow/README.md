@@ -20,21 +20,50 @@ To install this tool within cloudmesh, clone this repository and run
 $ pip install -e .
 ```
 
+
 The commands then should be available by calling the flow commands via
-cms. You can test that the installation went well by calling
+`cms`. 
+
+The first thing you have to do is to start the cloudmesh database in which we
+store information about the tasks as well as their status throughout the
+execution. If you have not yet started it please execute:
+
+```bash
+$ cms admin mongo start
+```
+
+
+Now you can test that the installation went well by calling
 
 ```bash
 $ cms flow list
 ```
 
 to list your current tasks. The command should complete correctly but
-output nothing.
+output nothing if you have now prior workflows integrated.
+
+
 
 ### Adding Tasks
 
+> THERE SEEMS A BUG HERE, SHOULD I NOT JUST REFER TO THE PYTHON FILE THAT HAS
+> THIS ALL DESCRIBED? IS THAT NOT MUCH EASIER?
+> WOULD THE ADD NOT ASSUME SOEM FILE WHER IT IS USED?
+
 There are several ways to add tasks to your workflow. The simplest is
-just to call `cms flow add $taskname`. For example, to add a task
-named `a` call `cms flow add a`. This creates a reference to the task
+just to call 
+
+```bash
+$ cms flow add TASKNAME
+```
+
+For example, to add a task named `a` call
+
+```bash
+cms flow add a
+```
+
+This creates a reference to the task
 in the database, and adds the task to your default workflow, which is
 named `workflow`
 
@@ -47,7 +76,7 @@ in parallel but `c` depends on `a`, execute the following sequence:
 $ cms flow node add a
 $ cms flow node add b
 $ cms flow node add c
-$ cms flow add edge c a
+$ cms flow edge add c a
 ```
 
 This creates the 3 above nodes, and then adds the dependency. You can
@@ -59,8 +88,6 @@ $ cms flow list
 Your output should look similar to this:
 
 ```bash
-$ cms flow list
-
 Node "a" dependecies []
 Node "b" dependencies []
 Node "c" dependencies ["a"]
