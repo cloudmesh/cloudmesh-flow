@@ -73,7 +73,7 @@ class WorkFlowDB(object):
         return [self._node_from_db(node) for node in self.list()]
 
     def list_edges(self):
-        return self.collection.aggregate([{"$unwind" : "dependecies"}, {"$project" : {"to" : "$name", "from" : "$dependecies"}}])
+        return self.collection.aggregate([{"$unwind" : "$dependencies"}, {"$project" : {"to" : "$name", "from" : "$dependencies"}}])
 
     def list_all_workflows(self):
         all_colls = self.database.collections()
