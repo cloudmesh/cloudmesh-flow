@@ -75,6 +75,9 @@ view a visualization of the workflow.
 
 A node in a visualization has a color. The color represents the status of the task associated with the node. If the task is pending for execution, its color will be `blue` otherwise the color is `green`.
 
+> ADD A SCREENSHOT AND PUT THE IMAGE IN an images/ dir
+
+
 ## Refernces
 
 * THis work is influenced by <https://github.com/cloudmesh/workflow>
