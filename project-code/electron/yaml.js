@@ -32,7 +32,26 @@ MongoClient.connect(url, { useNewUrlParser: true }, function(err, db) {
   var query = { cloud: "workflow" };
   dbo.collection(collection).find(query).toArray(function(err, result) {
     if (err) throw err;
+
     console.log(result);
+
+    var html = "<table>\n"
+    html += "<caption>Workflow Table</caption>\n"
+    for (var i in result) {
+        var entry = result[i]
+        console.log(entry)
+        html += "<tr>";
+        html += "<td> "+entry["name"]+" </td> ";
+        html += "<td> "+entry["dependencies"]+" </td> ";
+        html += "<td> "+entry["cm"]["modified"]+" </td> ";
+        html += "</tr>\n";
+    }
+    html += "</table>\n";
+
+console.log(html)
+
     db.close();
   });
 });
+
+
