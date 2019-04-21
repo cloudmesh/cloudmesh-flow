@@ -56,6 +56,25 @@ Node "a" is joined sequentially with node "c" and in parallel with node "b".
 
 ## Visualizing
 
+The package `cloudmesh.flow.visualize` visualizes the workflows that have been created by the `cloudmesh.flow` package.
+This package consists of a rest service which essentially provides the following two methods:
+* `/list` method which lists the names of all the workflows
+* `/monitor/{workflowname}` method which visualized the workflow named by `{workflowname}`  
+
+### Start the visualization service
+
+To start the visualization service run the following command:
+
+```bash
+cms flow visualize
+```
+The visualization service will then be available at the address `http://127.0.0.1:8080/flow/`.
+
+At the address `http://127.0.0.1:8080/flow/`, you can find the list of all the submitted workflows. By selecting a workflow you can 
+view a visualization of the workflow. 
+
+A node in a visualization has a color. The color represents the status of the task associated with the node. If the task is pending for execution, its color will be `blue` otherwise the color is `green`.
+
 ## Refernces
 
 * THis work is influenced by <https://github.com/cloudmesh/workflow>
