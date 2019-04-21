@@ -8,7 +8,8 @@ class Node(object):
         self.dependencies.append(other_node.name)
 
     def toDict(self):
-        return {"name": self.name, "dependencies": self.dependencies,
+        return {"name": self.name,
+                "dependencies": self.dependencies,
                 "workflow": self.workflow}
 
     def workflow_filename(self):

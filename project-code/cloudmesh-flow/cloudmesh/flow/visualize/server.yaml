@@ -53,7 +53,7 @@ paths:
           description: The workflow visualized
   /list:
     get:
-      operationId: render.getworkflownames
+      operationId: render.get_workflow_names
       tags:
         - monitor
       summary: Read the entire list of workflows

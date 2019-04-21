@@ -1,0 +1,26 @@
+{
+  "name": "cloudmesh-flow",
+  "version": "1.0.0",
+  "description": "A non working test for CLoudmesh Flow",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": "https://github.com/cloudmesh/cloudmesh-flow",
+  "keywords": [
+    "Electron",
+    "cloudmesh",
+    "cloud",
+    "workflow"
+  ],
+  "author": "Cloudmesh Community",
+  "license": "Apache",
+  "devDependencies": {
+    "electron": "^4.1.4"
+  },
+  "dependencies": {
+    "js-yaml": "^3.13.1",
+    "mongodb": "^3.2.3",
+    "mongoose": "^5.5.2"
+  }
+}
