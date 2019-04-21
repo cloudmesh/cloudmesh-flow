@@ -58,7 +58,7 @@ cms flow list
 ```
 Your output should look similar to this:
 
-```commandline
+```bash
 > cms flow list
 Node "a" dependecies []
 Node "b" dependencies []
