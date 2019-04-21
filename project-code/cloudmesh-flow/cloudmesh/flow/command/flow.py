@@ -90,7 +90,6 @@ class FlowCommand(PluginCommand):
             #    print(node)
 
             db = CmDatabase()
-
             nodes = db.find(collection=f"{arguments.FLOWNAME}-flow")
 
             order = ["name", "workflow", "dependencies", "cm.modified"]
