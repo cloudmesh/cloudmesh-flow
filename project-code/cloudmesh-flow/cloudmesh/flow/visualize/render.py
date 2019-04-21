@@ -31,7 +31,7 @@ def show(workflowname):
     for task in tasks:
         color = 'green'
         if task.status == "pending":
-            color = 'blue'
+            color = 'lightblue'
         nodes.append({'id': task.name, 'label': task.name, 'color': color})
         if len(task.dependencies) == 0:
             edges.append({'from': 'start', 'to': task.name, "arrows": 'to'})
