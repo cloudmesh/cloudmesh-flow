@@ -36,7 +36,7 @@ oyaml
 # dependency_links = ['http://github.com/nicolaiarocci/eve.git@develop']
 
 version = readfile("VERSION")[0].strip()
-readme = readfile('README.rst')
+readme = readfile('README.md')
 
 NAME = "cloudmesh-flow"
 DESCRIPTION = "A command called flow for the cloudmesh shell"
