@@ -5,6 +5,7 @@ from cloudmesh.flow.WorkFlow import  WorkFlowDB, parse_string_to_workflow, parse
 from cloudmesh.flow.WorkflowRunner import WorkflowRunner
 from cloudmesh.DEBUG import VERBOSE
 from cloudmesh.flow.Node import Node
+from cloudmesh.common.console import Console
 
 class FlowCommand(PluginCommand):
 
@@ -19,6 +20,7 @@ class FlowCommand(PluginCommand):
                 flow run [--flowname=FLOWNAME] [--flowfile=FILENAME]
                 flow node add NODENAME [--flowname=FLOWNAME]
                 flow edge add FROM TO [--flowname=FLOWNAME]
+                flow visualize
 
           This command manages and executes workflows
           The default workflow is just named "workflow" but you can specify multiple
@@ -41,12 +43,18 @@ class FlowCommand(PluginCommand):
         arguments.FLOWFILE = arguments["--flowfile"] or f"{arguments.FLOWNAME}-flow.py"
         VERBOSE(arguments)
         print("greetings!!!", arguments)
+
         if arguments["add"] and arguments.edge:
+
             db = WorkFlowDB(arguments.FLOWNAME)
             db.add_edge(arguments.FROM, arguments.TO)
+
         elif arguments["add"]:
+
             print("adding a node")
+
             if arguments.NODENAME:
+
                 node = Node(arguments.NODENAME)
                 node.workflow = arguments.FLOWNAME
                 try:
@@ -54,19 +62,29 @@ class FlowCommand(PluginCommand):
                     db.add_node(node.toDict())
                 except Exception as e:
                     print ("error executing", e)
+
             elif arguments["--flowfile"]:
+
                 filename = arguments["--flowfile"]
                 print("load from file", filename)
                 parse_yaml_to_workflow(filename, arguments.FLOWNAME)
+
         elif arguments["list"]:
+
             print("listing nodes!")
             db = WorkFlowDB(arguments.FLOWNAME)
             print(db.collection)
             nodes = db.list_nodes()
             for node in nodes:
                 print(node)
+
         elif arguments.run:
+
             runner = WorkflowRunner(arguments.FLOWNAME, arguments.FLOWFILE)
             runner.start_flow()
+
+        elif arguments.visualize:
+
+            Console.error("not implemented")
 
 
