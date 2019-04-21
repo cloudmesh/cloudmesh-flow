@@ -35,7 +35,7 @@ MongoClient.connect(url, { useNewUrlParser: true }, function(err, db) {
 
     console.log(result);
 
-    var html = "<table>\n"
+    var html = "\n<table>\n"
     html += "<caption>Workflow Table</caption>\n"
     for (var i in result) {
         var entry = result[i]
