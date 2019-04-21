@@ -17,14 +17,14 @@ you'll need to have Mongo up and running on your local machine.
 To install this tool within cloudmesh, clone this repository and run 
 
 ```bash
-pip install -e .
+$ pip install -e .
 ```
 
 The commands then should be available by calling the flow commands via
 cms. You can test that the installation went well by calling
 
 ```bash
-cms flow list
+$ cms flow list
 ```
 
 to list your current tasks. The command should complete correctly but
@@ -44,22 +44,23 @@ parallel. To add tasks `a`, `b`, and `c`, where `a` and `b` can be run
 in parallel but `c` depends on `a`, execute the following sequence:
 
 ```bash
-cms flow node add a
-cms flow node add b
-cms flow node add c
-cms flow add edge c a
+$ cms flow node add a
+$ cms flow node add b
+$ cms flow node add c
+$ cms flow add edge c a
 ```
 
 This creates the 3 above nodes, and then adds the dependency. You can
 check that the nodes were added successfully by running
 
 ```bash
-cms flow list
+$ cms flow list
 ```
 Your output should look similar to this:
 
 ```bash
-> cms flow list
+$ cms flow list
+
 Node "a" dependecies []
 Node "b" dependencies []
 Node "c" dependencies ["a"]
@@ -74,7 +75,7 @@ parameter to the `cms flow command`. For example, to add a new node in
 the workflow `workflow2`, run
 
 ```bash
-cms flow add node d --flowname=workflow2
+$ cms flow add node d --flowname=workflow2
 ```
 
 
@@ -83,8 +84,8 @@ earlier, and the flow `workflow2`. You can see the different results
 by running the list command on each
 
 ```bash
-cms flow list
-cms flow list --flowname=workflow2
+$ cms flow list
+$ cms flow list --flowname=workflow2
 ```
 
 ### Adding A Complete Flow
@@ -124,7 +125,7 @@ two methods:
 To start the visualization service run the following command:
 
 ```bash
-cms flow visualize
+$ cms flow visualize
 ```
 The visualization service will then be available at the address 
 
