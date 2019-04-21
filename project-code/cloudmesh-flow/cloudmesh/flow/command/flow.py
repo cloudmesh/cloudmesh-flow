@@ -1,11 +1,15 @@
 from __future__ import print_function
 from cloudmesh.shell.command import command
-from cloudmesh.shell.command import PluginCommand
+from cloudmesh.shell.command import PluginCommand, map_parameters
 from cloudmesh.flow.WorkFlow import  WorkFlowDB, parse_string_to_workflow, parse_yaml_to_workflow
 from cloudmesh.flow.WorkflowRunner import WorkflowRunner
 from cloudmesh.DEBUG import VERBOSE
 from cloudmesh.flow.Node import Node
 from cloudmesh.common.console import Console
+from cloudmesh.common.Printer import Printer
+from pprint import pprint
+from cloudmesh.mongo.CmDatabase import CmDatabase
+
 
 class FlowCommand(PluginCommand):
 
@@ -15,7 +19,7 @@ class FlowCommand(PluginCommand):
         """
         ::
           Usage:
-                flow list [--flowname=FLOWNAME]
+                flow list [--flowname=FLOWNAME] [--output=FORMAT]
                 flow add [--flowname=FLOWNAME] --flowfile=FILENAME
                 flow run [--flowname=FLOWNAME] [--flowfile=FILENAME]
                 flow node add NODENAME [--flowname=FLOWNAME]
@@ -40,12 +44,15 @@ class FlowCommand(PluginCommand):
               --file    specify the file
               --log     specify the log file
               --flowname=FLOWNAME   the name or the workflow
+              --output=OUTPUT       the output format [default: table]
         """
 
         arguments.FLOWNAME = arguments["--flowname"] or "workflow"
         arguments.FLOWFILE = arguments["--flowfile"] or f"{arguments.FLOWNAME}-flow.py"
-        VERBOSE(arguments)
-        print("greetings!!!", arguments)
+        arguments.output = arguments["--output"]
+
+
+        VERBOSE(arguments, verbose=0)
 
         if arguments["add"] and arguments.edge:
 
@@ -74,12 +81,28 @@ class FlowCommand(PluginCommand):
 
         elif arguments["list"]:
 
-            print("listing nodes!")
-            db = WorkFlowDB(arguments.FLOWNAME)
-            print(db.collection)
-            nodes = db.list_nodes()
+            #print("listing nodes!")
+            #db = WorkFlowDB(arguments.FLOWNAME)
+            #print(db.collection)
+            #nodes = db.list_nodes()
+            #pprint (nodes)
+            #for node in nodes:
+            #    print(node)
+
+            db = CmDatabase()
+
+            nodes = db.find(collection=f"{arguments.FLOWNAME}-flow")
+
+            order = ["name", "workflow", "dependencies", "cm.modified"]
+            header = ["Name", "Workflow", "Dependencies", "Modified"]
+
             for node in nodes:
-                print(node)
+                node["dependencies"] = ", ".join(node["dependencies"])
+            print(Printer.flatwrite(nodes,
+                                    order=order,
+                                    header=header,
+                                    output=arguments.output))
+
 
         elif arguments.run:
 
