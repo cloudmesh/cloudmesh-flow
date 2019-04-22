@@ -3,20 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <title>Monitor cloudmesh workflows </title>
+     <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css">
-    <link rel="stylesheet" href="../static/css/home.css">
+    <!--<link rel="stylesheet" href="../static/css/datatables.css">-->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+
+    <!--<script type="text/javascript" charset="utf8" src="../static/js/datatables.js"></script>-->
+
+	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script
       src="http://code.jquery.com/jquery-3.3.1.min.js"
       integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
       crossorigin="anonymous">
     </script>
+    <script type="text/javascript" class="init">
+        $(document).ready(function () {
+        $.noConflict();
+        var table = $('#flows').DataTable();
+        });
+
+
+	</script>
 </head>
 <body>
-    <div class="container">
-        <h1 class="banner">Monitor workflow</h1>
+    <div>
+        <h1>Monitor workflow</h1>
 
-        <div class="people">
-            <table>
+        <div>
+            <table id="flows" class="display">
                 <caption>Wokflows</caption>
                 <thead>
                     <tr>
