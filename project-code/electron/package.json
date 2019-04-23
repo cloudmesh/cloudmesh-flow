@@ -19,8 +19,15 @@
     "electron": "^4.1.4"
   },
   "dependencies": {
+    "cross-spawn-async": "^2.2.5",
+    "datatables.net": "^1.10.19",
+    "electron-forge": "^5.2.4",
+    "fs-extra": "^7.0.1",
     "js-yaml": "^3.13.1",
+    "minimatch": "^3.0.4",
     "mongodb": "^3.2.3",
-    "mongoose": "^5.5.2"
+    "mongoose": "^5.5.2",
+    "react-digraph": "^6.2.2",
+    "wrench": "^1.5.9"
   }
 }

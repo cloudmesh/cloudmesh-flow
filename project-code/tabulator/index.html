@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link href="https://unpkg.com/tabulator-tables@4.0.5/dist/css/tabulator.min.css" rel="stylesheet">
+
+    <meta charset="UTF-8">
+    <title>Cloudmesh Monitor</title>
+  </head>
+<body>
+
+<script type="text/javascript" src="https://unpkg.com/tabulator-tables@4.0.5/dist/js/tabulator.min.js"></script>
+
+    <h1>Cloudmesh Monitor</h1>
+    Versions: Node.js <script>document.write(process.versions.node)</script>,
+    Chromium <script>document.write(process.versions.chrome)</script>,
+    and Electron <script>document.write(process.versions.electron)</script>.
+
+<script type="text/javascript">
+
+const con = require('electron').remote.getGlobal('console')
+con.log('start.')
+
+yaml = require('js-yaml');
+fs   = require('fs');
+var home   = process.env.HOME;
+var config = yaml.safeLoad(fs.readFileSync(home + '/.cloudmesh/cloudmesh4.yaml', 'utf8'));
+var credentials = config["cloudmesh"]["data"]["mongo"]
+var collection = "workflow-flow"
+var MongoClient = require('mongodb').MongoClient;
+var auth = credentials["MONGO_USERNAME"] + ":" +  credentials["MONGO_PASSWORD"]
+
+var url = 'mongodb://' + auth + '@127.0.0.1:27017/?authMechanism=DEFAULT&authSource=admin';
+
+con.log(url)
+
+
+// MongoClient.connect(url, { useNewUrlParser: true }, function(err, db) {
+//  if (err) throw err;
+// var dbo = db.db("cloudmesh");
+// con.log("A")
+//   var query = { cloud: "workflow" };
+//  dbo.collection(collection).find(query).toArray(function(err, result) {
+//    if (err) throw err;
+//
+//    con.log(result);
+
+//    var html = "\n<table>\n"
+//    html += "<caption>Workflow Table</caption>\n"
+//    for (var i in result) {
+//        var entry = result[i]
+//        con.log(entry)
+//        html += "<tr>";
+//        html += "<td> "+entry["name"]+" </td> ";
+//        html += "<td> "+entry["dependencies"]+" </td> ";
+//        html += "<td> "+entry["cm"]["modified"]+" </td> ";
+//        html += "</tr>\n";
+//    }
+//    html += "</table>\n";
+
+//    con.log(html)
+//    # document.write(html)
+//    
+//    db.close();
+//  });
+// });
+</script>
+
+<p>Home: <script>document.write(home)</script></p>
+
+<p>auth: <script>document.write(url)</script></p>
+
+<p>html: <script>document.write(html)</script></p>
+
+
+<div id="example-table"></div>
+
+
+<script type="text/javascript" src="https://unpkg.com/tabulator-tables@4.0.5/dist/js/tabulator.min.js"></script>
+
+<script type="text/javascript">
+
+
+	//sample data
+	var tabledata = [
+		{id:1, name:"Oli Bob", age:"12", col:"red", dob:"12/08/2017"},
+		{id:2, name:"Mary May", age:"1", col:"blue", dob:"14/05/1982"},
+		{id:3, name:"Christine Lobowski", age:"42", col:"green", dob:"22/05/1982"},
+		{id:4, name:"Brendon Philips", age:"125", col:"orange", dob:"01/08/1980"},
+		{id:5, name:"Margret Marmajuke", age:"16", col:"yellow", dob:"31/01/1999"},
+	];
+
+	var table = new Tabulator("#example-table", {
+		height:200, // set height of table to enable virtual DOM
+		data:tabledata, //load initial data into table
+		layout:"fitColumns", //fit columns to width of table (optional)
+		columns:[ //Define Table Columns
+			{title:"Name", field:"name", sorter:"string", width:150},
+			{title:"Age", field:"age", sorter:"number", align:"left", formatter:"progress"},
+			{title:"Favourite Color", field:"col", sorter:"string", sortable:false},
+			{title:"Date Of Birth", field:"dob", sorter:"date", align:"center"},
+		],
+	    rowClick:function(e, id, data, row){ //trigger an alert message when the row is clicked
+	    	alert("Row " + id + " Clicked!!!!");
+	    },
+	});
+</script>
+  </body>
+</html>
