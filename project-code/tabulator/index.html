@@ -34,40 +34,43 @@ var url = 'mongodb://' + auth + '@127.0.0.1:27017/?authMechanism=DEFAULT&authSou
 
 
 MongoClient.connect(url, { useNewUrlParser: true }, function(err, db) {
- if (err) throw err;
-var dbo = db.db("cloudmesh");
-
-var query = { cloud: "workflow" };
- dbo.collection(collection).find(query).toArray(function(err, result) {
     if (err) throw err;
+    var dbo = db.db("cloudmesh");
 
+    var query = { cloud: "workflow" };
+    dbo.collection(collection).find(query).toArray(function(err, result) {
+	if (err) throw err;
+	
     var tabledata = []
     for (var i in result) {
-        var entry = result[i]
-      tabledata.push({
-      id:i,
-      name: entry["name"],
-      dependencies: entry["dependencies"].join(", "),
-      modified: entry["cm"]["modified"],
-      status: Math.floor(Math.random() *100.0)
-      })
+	var entry = result[i]
+	p =  Math.floor(Math.random() *100.0)
+	tabledata.push({
+	    id:i,
+	    name: entry["name"],
+	    dependencies: entry["dependencies"].join(", "),
+	    modified: entry["cm"]["modified"],
+	    progress: p,
+	    status: p > 50
+	})
 }
 	var table = new Tabulator("#example-table", {
 		//height:200, // set height of table to enable virtual DOM
 		data:tabledata, //load initial data into table
 		layout:"fitColumns", //fit columns to width of table (optional)
 		columns:[ //Define Table Columns
-			{title:"Name", field:"name", sorter:"string"},
-			{title:"dependencies", field:"dependencies", sorter:"string", align:"left"},
-			{title:"status", field:"status", sorter:"number", align:"left", formatter:"progress"}, 
-                        {title:"modified", field:"modified", sorter:"string", sortable:false},
+		    {title:"Name", field:"name", sorter:"string"},
+		    {title:"Dependencies", field:"dependencies", sorter:"string", align:"left"},
+		    {title:"Progress", field:"progress", sorter:"integer"},
+		    {title:"Progress", field:"progress", sorter:"number", align:"left", formatter:"progress"}, 
+                    {title:"Modified", field:"modified", sorter:"string", sortable:false},
+                    {title:"Done", field:"status", width:90,  align:"center", formatter:"tickCross", sorter:"boolean"},
 		],
 	    rowClick:function(e, id, data, row){ //trigger an alert message when the row is clicked
 	    	alert("Row " + id + " Clicked!!!!");
 	    },
-});
+	});
 
-    con.log(html)
 //    document.getElementById("example-table").innerHTML = html;
     
     db.close();
@@ -78,18 +81,14 @@ var query = { cloud: "workflow" };
 
 <h2>Worklfow Table</h2>
 
-
 <div id="example-table"></div>
 
 
 <script type="text/javascript" src="https://unpkg.com/tabulator-tables@4.0.5/dist/js/tabulator.min.js"></script>
 
 <script type="text/javascript">
-
-
-	//sample data
 	
 
 </script>
-  </body>
+</body>
 </html>
