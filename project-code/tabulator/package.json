@@ -23,6 +23,7 @@
     "electron-reload": "^1.4.0",
     "fs": "0.0.1-security",
     "js-yaml": "^3.13.1",
+    "mime": "^2.4.2",
     "mongodb": "^3.2.3",
     "tabulator-tables": "^4.2.5"
   }
