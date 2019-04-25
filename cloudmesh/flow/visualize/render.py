@@ -10,7 +10,7 @@ def get_workflow_names():
     mydb = WorkFlowDB()
     flows = mydb.list_all_workflows()
     for flow in flows:
-        workflow = {"name" : flow}
+        workflow = {"name" : flow, "modified" : ""}
         workflows.append(workflow)
 
     return jsonify(workflows)

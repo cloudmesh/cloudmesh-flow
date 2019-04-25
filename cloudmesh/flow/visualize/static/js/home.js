@@ -1,12 +1,12 @@
 /*
- * reference: https://raw.githubusercontent.com/realpython/materials/master/flask-connexion-rest/version_4/static/js/home.js
+ * This file is used in the home.html to call the rest api that visualizes the selected workflow.
  *
  */
 
-// Create the namespace instance
+
 let ns = {};
 
-// Create the model instance
+
 ns.model = (function() {
     'use strict';
 
@@ -34,35 +34,30 @@ ns.model = (function() {
 
 }());
 
-// Create the view instance
+
 ns.view = (function() {
     'use strict';
 
-    let $fname = $('#fname'),
-        $lname = $('#lname');
+
 
     // return the API
     return {
-        reset: function() {
-            $lname.val('');
-            $fname.val('').focus();
-        },
-        update_editor: function(fname, lname) {
-            $lname.val(lname);
-            $fname.val(fname).focus();
-        },
-        build_table: function(people) {
+
+        build_table: function(flows) {
             let rows = ''
 
-            // clear the table
-            $('.people table > tbody').empty();
 
-            // did we get a people array?
-            if (people) {
-                for (let i=0, l=people.length; i < l; i++) {
-                    rows += `<tr><td class="fname"><a href="/flow/monitor/${people[i].name}">${people[i].name}</a></td></tr>`;
+            $('.flows table > tbody').empty();
+
+
+            if (flows) {
+                var t = $('#flows').DataTable();
+                for (let i=0, l=flows.length; i < l; i++) {
+                  var name = `<a href="/flow/monitor/${flows[i].name}">${flows[i].name}</a>`;
+                  t.row.add([name, flows[i].modified]).draw(false);
+
                 }
-                $('table > tbody').append(rows);
+
             }
         },
         error: function(error_msg) {
@@ -76,93 +71,27 @@ ns.view = (function() {
     };
 }());
 
-// Create the controller
 ns.controller = (function(m, v) {
     'use strict';
 
     let model = m,
         view = v,
-        $event_pump = $('body'),
-        $fname = $('#fname'),
-        $lname = $('#lname');
+        $event_pump = $('body');
 
-    // Get the data from the model after the controller is done initializing
+
+
     setTimeout(function() {
         model.read();
     }, 100)
 
-    // Validate input
-    function validate(fname, lname) {
-        return fname !== "" && lname !== "";
-    }
 
-    // Create our event handlers
-    $('#create').click(function(e) {
-        let fname = $fname.val(),
-            lname = $lname.val();
 
-        e.preventDefault();
 
-        if (validate(fname, lname)) {
-            model.create(fname, lname)
-        } else {
-            alert('Problem with first or last name input');
-        }
-    });
 
-    $('#update').click(function(e) {
-        let fname = $fname.val(),
-            lname = $lname.val();
 
-        e.preventDefault();
-
-        if (validate(fname, lname)) {
-            model.update(fname, lname)
-        } else {
-            alert('Problem with first or last name input');
-        }
-        e.preventDefault();
-    });
-
-    $('#delete').click(function(e) {
-        let lname = $lname.val();
-
-        e.preventDefault();
-
-        if (validate('placeholder', lname)) {
-            model.delete(lname)
-        } else {
-            alert('Problem with first or last name input');
-        }
-        e.preventDefault();
-    });
-
-    $('#reset').click(function() {
-        view.reset();
-    })
-
-    $('table > tbody').on('dblclick', 'tr', function(e) {
-        let $target = $(e.target),
-            fname,
-            lname;
-
-        fname = $target
-            .parent()
-            .find('td.fname')
-            .text();
-
-        lname = $target
-            .parent()
-            .find('td.lname')
-            .text();
-
-        view.update_editor(fname, lname);
-    });
-
-    // Handle the model events
     $event_pump.on('model_read_success', function(e, data) {
         view.build_table(data);
-        view.reset();
+
     });
 
     $event_pump.on('model_create_success', function(e, data) {
