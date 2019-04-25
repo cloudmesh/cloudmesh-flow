@@ -2,8 +2,8 @@ from flask import Flask, jsonify, render_template, render_template_string
 from flask import jsonify
 import oyaml as yaml
 from os import walk
-from cloudmesh.flow.WorkFlow import WorkFlowDB
-from cloudmesh.flow.Node import Node
+from cloudmesh.flow.worflowdb import WorkFlowDB
+
 
 def get_workflow_names():
     workflows = []
