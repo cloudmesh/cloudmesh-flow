@@ -1,9 +1,9 @@
 import inspect
-from abc import ABC
 
+class BaseWorkFlow():
+    def __init_(self, flowfile):
+        self.flowname = flowfile[:flowfile.find("-")]
 
-class BaseWorkFlow(ABC):
-    
     def runCommand(self, commandName):
         method = inspect.getmembers(self).get(commandName)
         print(method)

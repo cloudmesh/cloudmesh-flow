@@ -116,6 +116,10 @@ class WorkFlowDB(object):
             {"$out" : started_collection}])
         self.switch_to_active_flow()
 
+
+    def add_node_result(self, nodename, result):
+        return self.collection.update_one({"name" : nodename}, {"$set" : {"result" : result}})
+
     def add_graph(self, yamlfile):
         pass
 

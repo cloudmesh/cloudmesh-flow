@@ -1,6 +1,8 @@
 from cloudmesh.flow.WorkFlow import WorkFlowDB
 import subprocess
 import time
+import json
+
 
 class WorkflowRunner(object):
     def __init__(self, flowname, filename = None):
@@ -29,9 +31,10 @@ class WorkflowRunner(object):
         process = subprocess.Popen(node.get_command())
         self.running_jobs.append({"handle" : process, "node" : node})
 
-    def resolve_node(self, node, status):
+    def resolve_node(self, node, status, output = {}):
         resolution = "finished" if status == 0 else "error"
         self.db.set_node_status(node.name, resolution)
+        self.db.add_node_result(node.name, output)
         if status == 0:
             self.db.resolve_node_dependencies(node)
 
@@ -43,7 +46,8 @@ class WorkflowRunner(object):
             if not status:
                 continue
             else:
-                self.resolve_node(process["node"], status)
+                output = json.loads(process_handle.stdout.read())
+                self.resolve_node(process["node"], status, output)
         self.start_available_nodes()
         time.sleep(3)
 
