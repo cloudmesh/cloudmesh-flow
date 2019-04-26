@@ -1,8 +1,8 @@
 import sys
 import time
-from cloudmesh.flow.FlowDecorator import BaseWorkFlow,
+from cloudmesh.flow.FlowDecorator import BaseWorkFlow
 
-@
+
 class MyFlow(BaseWorkFlow):
     def a():
         print("in a!")

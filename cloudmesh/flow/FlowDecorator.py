@@ -1,7 +1,7 @@
 import inspect
 
 class BaseWorkFlow():
-    def __init_(self, flowfile):
+    def __init__(self, flowfile):
         self.flowname = flowfile[:flowfile.find("-")]
 
     def runCommand(self, commandName):
