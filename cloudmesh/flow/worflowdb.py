@@ -38,6 +38,9 @@ class WorkFlowDB(object):
         reconstructed.workflow = self.workflow_name
         reconstructed.dependencies = db_obj["dependencies"]
         reconstructed.status = db_obj.get("status", "pending")
+        reconstructed.progress = ""
+        reconstructed.modified = ""
+        reconstructed.done = ""
         return reconstructed
 
     def get_node(self, name=None):

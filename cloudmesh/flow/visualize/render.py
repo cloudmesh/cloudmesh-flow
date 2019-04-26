@@ -15,6 +15,38 @@ def get_workflow_names():
 
     return jsonify(workflows)
 
+def refresh(workflowname):
+    workflowname = workflowname[:-5]
+    mydb = WorkFlowDB(workflowname)
+    tasks = mydb.list_nodes()
+
+    nodes = []
+    edges = []
+
+    nodes.append({'id': 'start', 'label': 'start', 'color' : 'yellow'})
+    nodes.append({'id': 'end', 'label': 'end', 'color' : 'indigo', 'font': {'color':'white'}})
+
+    to_end_nodes = [x.name for x in tasks]
+
+    for task in tasks:
+        color = 'green'
+        if task.status == "pending":
+            color = 'lightblue'
+        nodes.append({'id': task.name, 'label': task.name, 'color': color, "modified" : task.modified , "dependencies" : task.dependencies, "progress" : task.progress, "done" : task.done})
+        if len(task.dependencies) == 0:
+            edges.append({'from': 'start', 'to': task.name, "arrows": 'to'})
+        for dependency in task.dependencies:
+            edges.append({'from': dependency, 'to': task.name, "arrows": 'to'})
+            to_end_nodes.remove(dependency)
+
+    for end in to_end_nodes:
+        edges.append({'from': end, 'to': 'end', "arrows": 'to'})
+
+    flow = []
+    flow.append({"nodes" : nodes, "edges" : edges})
+
+    return jsonify(flow)
+
 def show(workflowname):
     workflowname = workflowname[:-5]
     mydb = WorkFlowDB(workflowname)

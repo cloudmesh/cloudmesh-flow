@@ -49,8 +49,30 @@ paths:
       produces:
         - "text/html"
       responses:
-        201:
+        200:
           description: The workflow visualized
+  /monitor/{workflowname}/refresh:
+    get:
+      operationId: render.refresh
+      tags:
+        - monitor
+      summary: get updates for the given workflow
+      description: get updates for the given workflow
+      parameters:
+        - name: workflowname
+          in: path
+          description: The workflow name to be shown
+          type: string
+          required: True
+      responses:
+        200:
+          description: Updates retrived successfully.
+          schema:
+            type: array
+            items:
+              properties:
+                name:
+                  type: string
   /list:
     get:
       operationId: render.get_workflow_names
