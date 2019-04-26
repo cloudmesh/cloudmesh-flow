@@ -5,8 +5,10 @@ class BaseWorkFlow():
         self.flowname = flowfile[:flowfile.find("-")]
 
     def runCommand(self, commandName):
-        method = inspect.getmembers(self).get(commandName)
-        print(method)
+        method = None
+        for (name, func) in inspect.getmembers(self):
+            if name == commandName:
+                method = func
         result = method()
         return result
 

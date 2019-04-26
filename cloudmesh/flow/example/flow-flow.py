@@ -4,13 +4,13 @@ from cloudmesh.flow.FlowDecorator import BaseWorkFlow
 
 
 class MyFlow(BaseWorkFlow):
-    def a():
+    def a(self):
         print("in a!")
         time.sleep(5)
-    def b():
+    def b(self):
         print("in b!")
         time.sleep(10)
-    def c():
+    def c(self):
         print("in c!")
         time.sleep(10)
 
