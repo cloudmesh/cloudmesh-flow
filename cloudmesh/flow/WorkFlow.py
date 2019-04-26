@@ -26,10 +26,12 @@ parser = Lark(grammar, start = "expr")
 
 class WorkFlowDB(object):
 
-    def __init__(self, name="workflow"):
+    def __init__(self, name="workflow", active = False):
         self.database = CmDatabase()
         self.workflow_name = name
         self.collection = self.database.collection(f"{name}-flow")
+        if active:
+            self.switch_to_active_flow()
 
     def attributes(self, name):
         data = {
