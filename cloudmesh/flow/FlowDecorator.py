@@ -1,5 +1,5 @@
 import inspect
-from cloudmesh.Flow.WorkFlow import WorkFlowDB
+from cloudmesh.flow.WorkFlow import WorkFlowDB
 
 class BaseWorkFlow():
     def __init__(self, flowfile):
