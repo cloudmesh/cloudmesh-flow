@@ -16,7 +16,7 @@ from cloudmesh.common.util import HEADING
 from cloudmesh.common.systeminfo import systeminfo
 from pprint import pprint
 
-num_nodes = 50
+num_nodes = 5
 @pytest.mark.incremental
 class TestConfig:
     def test_add_nodes(self):
@@ -45,7 +45,7 @@ class TestConfig:
 
         StopWatch.stop("add edges")
 
-        VERBOSE(result)
+        VERBOSE(results)
 
     def test_remove_edges(self):
         HEADING()
@@ -59,7 +59,7 @@ class TestConfig:
             results.append(Shell.execute("cms flow edge delete " + node_name + " " + next_node_name, shell=True))
         StopWatch.stop("del edges")
 
-        VERBOSE(result)
+        VERBOSE(results)
 
     def test_remove_nodes(self):
         HEADING()
