@@ -36,7 +36,7 @@ class WorkflowRunner(object):
         self.db.set_node_status(node.name, resolution)
         #self.db.add_node_result(node.name, output)
         if status == 0:
-            self.db.resolve_node_dependencies(node)
+            self.db.resolve_node_dependencies(node.name)
 
 
     def check_on_running_processes(self):
