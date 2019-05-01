@@ -35,6 +35,10 @@ class Test_baseclass:
 
     def test_runmethod(self):
         result = self.flow.runCommand("a")
-        node = self.db.get_node("a")
-        print(result)
-        print(node)
+        assert result["name"] == "a"
+
+    def test_database_insertion(self):
+        result = self.flow.runCommand("a")
+        dbresult = self.db.get_node("a")
+        assert dbresult["result"]["name"] == "a"
+        assert dbresult["result"]["result"]["everything"] == "ok"
