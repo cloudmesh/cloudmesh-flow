@@ -37,6 +37,8 @@ class WorkflowRunner(object):
         #self.db.add_node_result(node.name, output)
         if status == 0:
             self.db.resolve_node_dependencies(node.name)
+        #easiest way to remove object, but will be slow for large workflows. to improve later
+        self.running_jobs = [job for job in self.running_jobs if job["node"].name != node.name]
 
 
     def check_on_running_processes(self):
