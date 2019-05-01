@@ -151,7 +151,7 @@ if __name__ == "__main__":
     
 ```
 
-This makes it so the flow runner is able to call your methods. Anything you return at the end of your function will be inserted into the database as the result of running that node. You should return a dict, which will be accessible via the `result` field in the db.
+This makes it so the flow runner is able to call your methods. Anything you return at the end of your function will be inserted into the database as the result of running that node. You should return a dict, which will be accessible via the `result` field in the db. Note that your filename should be of the form `$flowname-flow.py`. This makes it so the result parser can grab the result of your workflow methods and insert them into the database corresponding to the current run of $flowname.
 
 ## Visualizing
 
