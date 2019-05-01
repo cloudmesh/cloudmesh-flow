@@ -28,7 +28,7 @@ class WorkflowRunner(object):
     def start_node(self, node):
         self.db.set_node_status(node.name, "running")
         print("running command", node.get_command())
-        process = subprocess.Popen(node.get_command())
+        process = subprocess.Popen(node.get_command(), stdout=subprocess.PIPE )
         self.running_jobs.append({"handle" : process, "node" : node})
 
     def resolve_node(self, node, status, output = {}):
@@ -43,10 +43,12 @@ class WorkflowRunner(object):
         for process in self.running_jobs:
             process_handle = process["handle"]
             status = process_handle.poll()
-            if not status:
+            if status is None:
                 continue
             else:
-                output = json.loads(process_handle.stdout.read())
+                printed_output = process_handle.communicate()[0]
+                print(printed_output)
+                output = json.loads(printed_output)
                 self.resolve_node(process["node"], status, output)
         self.start_available_nodes()
         time.sleep(3)
