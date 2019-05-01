@@ -12,10 +12,10 @@ import os
 from cloudmesh.common.ConfigDict import ConfigDict
 from cloudmesh.common.util import HEADING
 from cloudmesh.flow.FlowDecorator import BaseWorkFlow
-
+from cloudmesh.flow.WorkFlow import WorkFlowDB
 import pytest
 
-class SampleFlow(BaseFlow):
+class SampleFlow(BaseWorkFlow):
     def a(self):
         return {"name" : "a", "result" : {"everything" : "ok"}}
 
@@ -30,11 +30,11 @@ class Test_baseclass:
         self.db.collection.delete_many({})
         self.db.add_node({"name" : "a", "dependencies" : []})
         self.db.start_flow()
-        self.flow = SampleFlow("test")
+        self.flow = SampleFlow("test-flow.py")
 
 
     def test_runmethod(self):
-        restult = self.flow.runMethod("a")
+        result = self.flow.runCommand("a")
         node = self.db.get_node("a")
         print(result)
         print(node)
