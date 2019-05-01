@@ -77,7 +77,7 @@ class FlowCommand(PluginCommand):
 
                 filename = arguments["--flowfile"]
                 print("load from file", filename)
-                parse_yaml_to_workflow(filename, arguments.FLOWNAME)
+                parse_yaml_to_workflow(filename)
 
         elif arguments["list"]:
 
