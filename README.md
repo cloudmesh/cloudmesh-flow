@@ -136,6 +136,21 @@ node `b`.
 
 #### Adding a Flow YAML Definition
 
+## Running Flows
+Workflows nodes correspond to Python functions that are attached to specific workflow classes. To run a workflow, you need to specify the task definitions. The easiest way to see this in action is in the [examples directory](https://github.com/cloudmesh/cloudmesh-flow/tree/master/cloudmesh/flow/example).
+
+Defining a Workflow is simple: declare a class with one method for each node, and have the class inherit from the BaseWorkFlow base class. The method names should correspond to your node names, for example if you node is named "a" you must define a method named `a()` At the bottom of your file, copy the _entry point code_ that is listed on each of the example files:
+
+```python
+
+if __name__ == "__main__":
+    Flow = MyFlow(sys.argv[0])
+    Flow.runCommand(sys.argv[1])
+    
+```
+
+This makes it so the flow runner is able to call your methods. Anything you return at the end of your function will be inserted into the database as the result of running that node. You should return a dict, which will be accessible via the `result` field in the db.
+
 ## Visualizing
 
 The package `cloudmesh.flow.visualize` visualizes the workflows that
