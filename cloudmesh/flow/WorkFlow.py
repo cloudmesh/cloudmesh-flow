@@ -64,6 +64,13 @@ class WorkFlowDB(object):
         reconstructed.status = db_obj.get("status", "pending")
         return reconstructed
 
+    def remove_node(self, name):
+        self.collection.delete_one({"name" : name})
+        self.collection.update_many({}, {"$pull" : {"dependencies" : "name"}})
+
+    def remove_edge(self, node, depends_on):
+        self.collection.update_one({"name" : node}, {"$pull" : {"dependencies" : depends_on}})
+
     def get_node(self, name=None):
         return self._node_from_db(self.collection.find_one({"name" : name}))
 

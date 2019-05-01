@@ -113,22 +113,19 @@ class FlowCommand(PluginCommand):
             Console.error("vizulize not implemented")
 
         elif arguments["delete"] and arguments.edge:
+            db = WorkFlowDB(arguments.FLOWNAME)
+            db.remove_edge(arguments.FROM, arguments.TO)
 
-            Console.error("delete not implemented")
-            Console.error("This will delete the edge between the nodes if "
-                          "exists")
 
         elif arguments["delete"] and arguments.node:
+            db = WorkFlowDB(arguments.FLOWNAME)
+            db.remove_node(arguments.node)
 
-            Console.error("delete not implemented")
-            Console.error("This will delete the node, and lose the edges to "
-                          "this node.")
 
-        elif arguments["inverst"] and arguments.edge:
+        elif arguments["invert"] and arguments.edge:
+            db = WorkFlowDB(arguments.FLOWNAME)
+            db.remove_edge(arguments.FROM, arguments.TO)
+            db.add_edge(arguments.TO, arguments.FROM)
 
-            Console.error("invert not implemented")
-            Console.error("This will invert the edge between two nodes. It is a "
-                          "convenient method in case you eccidently added a "
-                          "wrong edge direction")
 
 
