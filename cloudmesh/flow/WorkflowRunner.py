@@ -31,10 +31,10 @@ class WorkflowRunner(object):
         process = subprocess.Popen(node.get_command(), stdout=subprocess.PIPE )
         self.running_jobs.append({"handle" : process, "node" : node})
 
-    def resolve_node(self, node, status, output = {}):
+    def resolve_node(self, node, status):
         resolution = "finished" if status == 0 else "error"
         self.db.set_node_status(node.name, resolution)
-        self.db.add_node_result(node.name, output)
+        #self.db.add_node_result(node.name, output)
         if status == 0:
             self.db.resolve_node_dependencies(node)
 
@@ -46,10 +46,10 @@ class WorkflowRunner(object):
             if status is None:
                 continue
             else:
-                printed_output = process_handle.communicate()[0]
-                print(printed_output)
-                output = json.loads(printed_output)
-                self.resolve_node(process["node"], status, output)
+                #printed_output = process_handle.communicate()[0]
+                #print(printed_output)
+                #output = json.loads(printed_output)
+                self.resolve_node(process["node"], status)
         self.start_available_nodes()
         time.sleep(3)
 
