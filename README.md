@@ -133,8 +133,10 @@ Node `a` is joined sequentially with node `c` and in parallel with
 node `b`.
 
 #### Adding a Flow String
+Currently only supported in a YAML file.
 
 #### Adding a Flow YAML Definition
+You can also specify a flow in a YAML file. The file must have two properties, flowstring and flowname. This allows you to add an entire flow at once unders a specfic name. See the examples directory for details. 
 
 ## Running Flows
 Workflows nodes correspond to Python functions that are attached to specific workflow classes. To run a workflow, you need to specify the task definitions. The easiest way to see this in action is in the [examples directory](https://github.com/cloudmesh/cloudmesh-flow/tree/master/cloudmesh/flow/example).
