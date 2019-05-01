@@ -69,7 +69,7 @@ class Test_flowdb:
 
 
     def test_remove(self):
-        self.db.collection.remove_many({})
+        self.db.collection.delete_many({})
         node_1 = Node("testsource")
         node_2 = Node("testdest")
         self.db.add_node(node_1.toDict())
