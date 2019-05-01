@@ -28,7 +28,7 @@ class Test_flowdb:
     def test_add_node(self):
         test_node = Node("test test")
         self.db.add_node(test_node.toDict())
-        num_nodes = self.db.collection.count_documents()
+        num_nodes = self.db.collection.count_documents({})
         assert num_nodes == 1
 
     def test_add_edge(self):

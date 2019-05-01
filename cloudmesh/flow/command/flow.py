@@ -119,7 +119,7 @@ class FlowCommand(PluginCommand):
 
         elif arguments["delete"] and arguments.node:
             db = WorkFlowDB(arguments.FLOWNAME)
-            db.remove_node(arguments.node)
+            db.remove_node(arguments.NODENAME)
 
 
         elif arguments["invert"] and arguments.edge:

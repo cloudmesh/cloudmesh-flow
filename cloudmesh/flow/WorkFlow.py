@@ -42,7 +42,8 @@ class WorkFlowDB(object):
             },
             "kind": "flow",
             "cloud": self.workflow_name,
-            "name": name
+            "name": name,
+            "status" : "defined"
         }
         return data
 
