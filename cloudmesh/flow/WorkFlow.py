@@ -106,7 +106,7 @@ class WorkFlowDB(object):
         started_collection = f"{self.workflow_name}-flow-active"
         self.collection = self.database.collection(started_collection)
 
-    def resolve_node_dependency(self, name=None):
+    def resolve_node_dependencies(self, name=None):
         return self.collection.update_many(
             {"dependencies" : name}, {"$pull" : {"dependencies" : name}})
 
