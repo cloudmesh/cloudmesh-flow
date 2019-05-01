@@ -63,6 +63,7 @@ class WorkFlowDB(object):
         reconstructed.workflow = self.workflow_name
         reconstructed.dependencies = db_obj["dependencies"]
         reconstructed.status = db_obj.get("status", "pending")
+        reconstructed.result = db_obj.get("result", {})
         return reconstructed
 
     def remove_node(self, name):

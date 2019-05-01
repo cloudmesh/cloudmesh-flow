@@ -3,6 +3,7 @@ class Node(object):
         self.name = name
         self.dependencies = []
         self.workflow = ""
+        self.result = {}
 
     def add_dependency(self, other_node):
         self.dependencies.append(other_node.name)
