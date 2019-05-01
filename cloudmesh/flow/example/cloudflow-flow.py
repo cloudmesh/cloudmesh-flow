@@ -1,4 +1,4 @@
-from cloudmesh.compute.Provider import Provider
+from cloudmesh.compute.vm.Provider import Provider
 from cloudmesh.flow.FlowDecorator import BaseWorkFlow
 
 #
