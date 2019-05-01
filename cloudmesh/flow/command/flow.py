@@ -124,8 +124,8 @@ class FlowCommand(PluginCommand):
 
         elif arguments["invert"] and arguments.edge:
             db = WorkFlowDB(arguments.FLOWNAME)
-            db.remove_edge(arguments.FROM, arguments.TO)
-            db.add_edge(arguments.TO, arguments.FROM)
+            db.remove_edge(arguments.TO, arguments.FROM)
+            db.add_edge(arguments.FROM, arguments.TO)
 
 
 
