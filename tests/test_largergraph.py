@@ -15,16 +15,4 @@ from cloudmesh.flow import WorkflowRunner
 import pytest
 
 @pytest.mark.incremental
-class Test_flowrunner:
-
-    # noinspection PyPep8Naming
-    def tearDown(self):
-        pass
-
-    def test_create(self):
-        runner = WorkflowRunner("test")
-
-    def test_run(self):
-        runner = WorkflowRunner("test")
-        runner.start_flow()
-        assert runner.running == True
+class Test_largergraph:

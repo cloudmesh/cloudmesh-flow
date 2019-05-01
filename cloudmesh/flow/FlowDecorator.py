@@ -7,7 +7,7 @@ class BaseWorkFlow():
 
 
     def save_result_to_db(self, nodeName, result):
-        print("saving result to", self.flowname)
+        print("saving result to", self.flowname, result)
         db = WorkFlowDB(self.flowname, True)
         db.add_node_result(nodeName, result)
 
