@@ -24,7 +24,7 @@ class FlowCommand(PluginCommand):
                 flow run [--flowname=FLOWNAME] [--flowfile=FILENAME]
                 flow node add NODENAME [--flowname=FLOWNAME]
                 flow edge add FROM TO [--flowname=FLOWNAME]
-                flow edge delete NODENAME
+                flow node delete NODENAME
                 flow edge delete FROM TO
                 flow edge invert FROM TO
                 flow visualize

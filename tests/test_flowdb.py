@@ -66,3 +66,20 @@ class Test_flowdb:
         for node in new_nodes:
             print(node.status)
             assert node.status == "pending"
+
+
+    def test_remove(self):
+        self.db.collection.remove_many({})
+        node_1 = Node("testsource")
+        node_2 = Node("testdest")
+        self.db.add_node(node_1.toDict())
+        self.db.add_node(node_2.toDict())
+        self.db.add_edge(node_1.name, node_2.name)
+        deps = self.db.collection.count({"dependencies.0" : {"$exists" : True}})
+        assert deps == 1
+        self.db.remove_edge(node_1.name, node_2.name)
+        deps = self.db.collection.count({"dependencies.0" : {"$exists" : True}})
+        assert deps == 0
+        self.db.remove_node(node_1.name)
+        nodes = self.db.collection.count({"name" : node_1.name})
+        assert nodes == 0
