@@ -16,7 +16,7 @@ from cloudmesh.common.util import HEADING
 from cloudmesh.common.systeminfo import systeminfo
 from pprint import pprint
 
-num_nodes = 5
+num_nodes = 50
 @pytest.mark.incremental
 class TestConfig:
     def test_add_nodes(self):
