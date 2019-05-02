@@ -27,3 +27,4 @@ class Test_flowrunner:
     def test_run(self):
         runner = WorkflowRunner("test")
         runner.start_flow()
+        assert runner.running == True

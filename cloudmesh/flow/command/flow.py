@@ -24,7 +24,7 @@ class FlowCommand(PluginCommand):
                 flow run [--flowname=FLOWNAME] [--flowfile=FILENAME]
                 flow node add NODENAME [--flowname=FLOWNAME]
                 flow edge add FROM TO [--flowname=FLOWNAME]
-                flow edge delete NODENAME
+                flow node delete NODENAME
                 flow edge delete FROM TO
                 flow edge invert FROM TO
                 flow visualize
@@ -77,7 +77,7 @@ class FlowCommand(PluginCommand):
 
                 filename = arguments["--flowfile"]
                 print("load from file", filename)
-                parse_yaml_to_workflow(filename, arguments.FLOWNAME)
+                parse_yaml_to_workflow(filename)
 
         elif arguments["list"]:
 
@@ -113,22 +113,19 @@ class FlowCommand(PluginCommand):
             Console.error("vizulize not implemented")
 
         elif arguments["delete"] and arguments.edge:
+            db = WorkFlowDB(arguments.FLOWNAME)
+            db.remove_edge(arguments.FROM, arguments.TO)
 
-            Console.error("delete not implemented")
-            Console.error("This will delete the edge between the nodes if "
-                          "exists")
 
         elif arguments["delete"] and arguments.node:
+            db = WorkFlowDB(arguments.FLOWNAME)
+            db.remove_node(arguments.NODENAME)
 
-            Console.error("delete not implemented")
-            Console.error("This will delete the node, and lose the edges to "
-                          "this node.")
 
-        elif arguments["inverst"] and arguments.edge:
+        elif arguments["invert"] and arguments.edge:
+            db = WorkFlowDB(arguments.FLOWNAME)
+            db.remove_edge(arguments.TO, arguments.FROM)
+            db.add_edge(arguments.FROM, arguments.TO)
 
-            Console.error("invert not implemented")
-            Console.error("This will invert the edge between two nodes. It is a "
-                          "convenient method in case you eccidently added a "
-                          "wrong edge direction")
 
 

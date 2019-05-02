@@ -1,6 +1,8 @@
 from cloudmesh.flow.WorkFlow import WorkFlowDB
 import subprocess
 import time
+import json
+
 
 class WorkflowRunner(object):
     def __init__(self, flowname, filename = None):
@@ -26,23 +28,29 @@ class WorkflowRunner(object):
     def start_node(self, node):
         self.db.set_node_status(node.name, "running")
         print("running command", node.get_command())
-        process = subprocess.Popen(node.get_command())
+        process = subprocess.Popen(node.get_command(), stdout=subprocess.PIPE )
         self.running_jobs.append({"handle" : process, "node" : node})
 
     def resolve_node(self, node, status):
         resolution = "finished" if status == 0 else "error"
         self.db.set_node_status(node.name, resolution)
+        #self.db.add_node_result(node.name, output)
         if status == 0:
-            self.db.resolve_node_dependencies(node)
+            self.db.resolve_node_dependencies(node.name)
+        #easiest way to remove object, but will be slow for large workflows. to improve later
+        self.running_jobs = [job for job in self.running_jobs if job["node"].name != node.name]
 
 
     def check_on_running_processes(self):
         for process in self.running_jobs:
             process_handle = process["handle"]
             status = process_handle.poll()
-            if not status:
+            if status is None:
                 continue
             else:
+                #printed_output = process_handle.communicate()[0]
+                #print(printed_output)
+                #output = json.loads(printed_output)
                 self.resolve_node(process["node"], status)
         self.start_available_nodes()
         time.sleep(3)

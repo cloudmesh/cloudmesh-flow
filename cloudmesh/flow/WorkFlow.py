@@ -26,10 +26,12 @@ parser = Lark(grammar, start = "expr")
 
 class WorkFlowDB(object):
 
-    def __init__(self, name="workflow"):
+    def __init__(self, name="workflow", active = False):
         self.database = CmDatabase()
         self.workflow_name = name
         self.collection = self.database.collection(f"{name}-flow")
+        if active:
+            self.switch_to_active_flow()
 
     def attributes(self, name):
         data = {
@@ -40,7 +42,8 @@ class WorkFlowDB(object):
             },
             "kind": "flow",
             "cloud": self.workflow_name,
-            "name": name
+            "name": name,
+            "status" : "defined"
         }
         return data
 
@@ -60,7 +63,15 @@ class WorkFlowDB(object):
         reconstructed.workflow = self.workflow_name
         reconstructed.dependencies = db_obj["dependencies"]
         reconstructed.status = db_obj.get("status", "pending")
+        reconstructed.result = db_obj.get("result", {})
         return reconstructed
+
+    def remove_node(self, name):
+        self.collection.delete_one({"name" : name})
+        self.collection.update_many({}, {"$pull" : {"dependencies" : "name"}})
+
+    def remove_edge(self, node, depends_on):
+        self.collection.update_one({"name" : node}, {"$pull" : {"dependencies" : depends_on}})
 
     def get_node(self, name=None):
         return self._node_from_db(self.collection.find_one({"name" : name}))
@@ -96,7 +107,7 @@ class WorkFlowDB(object):
         started_collection = f"{self.workflow_name}-flow-active"
         self.collection = self.database.collection(started_collection)
 
-    def resolve_node_dependency(self, name=None):
+    def resolve_node_dependencies(self, name=None):
         return self.collection.update_many(
             {"dependencies" : name}, {"$pull" : {"dependencies" : name}})
 
@@ -115,6 +126,10 @@ class WorkFlowDB(object):
                 "status" : "pending"}},
             {"$out" : started_collection}])
         self.switch_to_active_flow()
+
+
+    def add_node_result(self, nodename, result):
+        return self.collection.update_one({"name" : nodename}, {"$set" : {"result" : result}})
 
     def add_graph(self, yamlfile):
         pass
@@ -143,22 +158,22 @@ class FlowConstructor(Visitor):
 
     def join(self, val):
         join_type = val.children[0].data
-        print("join", val.children, "as", join_type)
+        #print("join", val.children, "as", join_type)
 
     def basegroup(self, val):
-        print(val, len(val.children))
+        #print(val, len(val.children))
         #expressions are either a single node or a group
         if len(val.children) == 1: return
         lhs = val.children[0]
         join = val.children[1]
         rhs = val.children[2]
         join_type = join.children[0].data
-        print("join of type", join_type)
+        #print("join of type", join_type)
         if join_type == "sequence":
             lhs_node_name = lhs.children[0]
             rhs_node_name = rhs.children[0]
-            print("join", lhs_node_name, "with", rhs_node_name, "in type", join_type)
-            self.db.add_edge(lhs_node_name, rhs_node_name)
+            #print("join", lhs_node_name, "with", rhs_node_name, "in type", join_type)
+            self.db.add_edge(rhs_node_name, lhs_node_name)
 
     def group(self, val):
         if len(val.children) == 1: return
@@ -171,18 +186,18 @@ class FlowConstructor(Visitor):
         if join_type == "sequence":
             lhs_node_name = lhs_node.children[0]
             rhs_node_name = rhs_node.children[0]
-            print("join", lhs_node_name, "with", rhs_node_name, "in type", join_type)
-            self.db.add_edge(lhs_node_name, rhs_node_name)
+            #print("join", lhs_node_name, "with", rhs_node_name, "in type", join_type)
+            self.db.add_edge(rhs_node_name, lhs_node_name)
 
     def _is_node(self, val):
-        print("is node", val.data)
+        #print("is node", val.data)
         return val.data == "flownode"
 
     def resolve_to_node(self, val):
         if self._is_node(val): return val
         else:
-            print(val.data, val.children)
-            return self.resolve_to_node(val.children[0])
+            #print(val.data, val.children)
+            return self.resolve_to_node(val.children[-1])
 
 
 
