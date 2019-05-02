@@ -158,22 +158,22 @@ class FlowConstructor(Visitor):
 
     def join(self, val):
         join_type = val.children[0].data
-        print("join", val.children, "as", join_type)
+        #print("join", val.children, "as", join_type)
 
     def basegroup(self, val):
-        print(val, len(val.children))
+        #print(val, len(val.children))
         #expressions are either a single node or a group
         if len(val.children) == 1: return
         lhs = val.children[0]
         join = val.children[1]
         rhs = val.children[2]
         join_type = join.children[0].data
-        print("join of type", join_type)
+        #print("join of type", join_type)
         if join_type == "sequence":
             lhs_node_name = lhs.children[0]
             rhs_node_name = rhs.children[0]
-            print("join", lhs_node_name, "with", rhs_node_name, "in type", join_type)
-            self.db.add_edge(lhs_node_name, rhs_node_name)
+            #print("join", lhs_node_name, "with", rhs_node_name, "in type", join_type)
+            self.db.add_edge(rhs_node_name, lhs_node_name)
 
     def group(self, val):
         if len(val.children) == 1: return
@@ -186,18 +186,18 @@ class FlowConstructor(Visitor):
         if join_type == "sequence":
             lhs_node_name = lhs_node.children[0]
             rhs_node_name = rhs_node.children[0]
-            print("join", lhs_node_name, "with", rhs_node_name, "in type", join_type)
-            self.db.add_edge(lhs_node_name, rhs_node_name)
+            #print("join", lhs_node_name, "with", rhs_node_name, "in type", join_type)
+            self.db.add_edge(rhs_node_name, lhs_node_name)
 
     def _is_node(self, val):
-        print("is node", val.data)
+        #print("is node", val.data)
         return val.data == "flownode"
 
     def resolve_to_node(self, val):
         if self._is_node(val): return val
         else:
-            print(val.data, val.children)
-            return self.resolve_to_node(val.children[0])
+            #print(val.data, val.children)
+            return self.resolve_to_node(val.children[-1])
 
 
 
