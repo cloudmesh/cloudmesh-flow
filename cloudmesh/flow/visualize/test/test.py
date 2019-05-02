@@ -1,14 +1,6 @@
-import json
-import os
-
-import oyaml as yaml
-import requests
-import sys
-
-from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.flow.WorkFlow import WorkFlowDB
 from cloudmesh.flow.Node import Node
-
+from cloudmesh.flow.visualize import manager
 
 
 def define_flow():
@@ -86,6 +78,6 @@ def list_flows():
 
 list_flow("testflow2-flow")
 
-
+manager.start()
 
 
