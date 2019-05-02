@@ -25,7 +25,7 @@ def home():
 @app.route('/shutdown', methods=['GET'])
 def shutdown():
     shutdown_server()
-    return 'Server shutting down...'
+    return 'Server is shutting down...'
 
 def run():
     try:
