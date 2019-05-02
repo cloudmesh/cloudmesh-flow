@@ -46,21 +46,17 @@ output nothing if you have now prior workflows integrated.
 
 ### Adding Tasks
 
-> THERE SEEMS A BUG HERE, SHOULD I NOT JUST REFER TO THE PYTHON FILE THAT HAS
-> THIS ALL DESCRIBED? IS THAT NOT MUCH EASIER?
-> WOULD THE ADD NOT ASSUME SOEM FILE WHER IT IS USED?
-
 There are several ways to add tasks to your workflow. The simplest is
 just to call 
 
 ```bash
-$ cms flow add TASKNAME
+$ cms flow node add TASKNAME
 ```
 
 For example, to add a task named `a` call
 
 ```bash
-cms flow add a
+cms flow node add a
 ```
 
 This creates a reference to the task
@@ -102,7 +98,7 @@ parameter to the `cms flow command`. For example, to add a new node in
 the workflow `workflow2`, run
 
 ```bash
-$ cms flow add node d --flowname=workflow2
+$ cms flow node add d --flowname=workflow2
 ```
 
 
