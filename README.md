@@ -182,7 +182,7 @@ At the page `http://127.0.0.1:8080/flow/` you can find the list of all the submi
 ![http://127.0.0.1:8080/flow/](images/flow-visualize-home.png){#fig:flow-visualize-home}
 
 By
-selecting a workflow you can view a visualization of the workflow.
+selecting a workflow you can view a visualization of the workflow. The visualization of the workflow is getting updated every three seconds.
 
 ![http://127.0.0.1:8080/flow/{workflow}](images/flow-visualize-workflow.png){#fig:flow-visualize-workflow}
 
