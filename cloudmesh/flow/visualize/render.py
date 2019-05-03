@@ -23,7 +23,7 @@ def refresh(workflowname):
     nodes = []
     edges = []
 
-    nodes.append({'id': 'start', 'label': 'start', 'color' : 'yellow'})
+    nodes.append({'id': 'start', 'label': 'start', 'color' : 'yellow', 'x' : 40, 'y' : 200})
     nodes.append({'id': 'end', 'label': 'end', 'color' : 'indigo', 'font': {'color':'white'}})
 
     to_end_nodes = [x.name for x in tasks]
@@ -55,7 +55,7 @@ def show(workflowname):
     nodes = []
     edges = []
 
-    nodes.append({'id': 'start', 'label': 'start', 'color' : 'yellow'})
+    nodes.append({'id': 'start', 'label': 'start', 'color' : 'yellow', 'x': 132, 'y': 286})
     nodes.append({'id': 'end', 'label': 'end', 'color' : 'indigo', 'font': {'color':'white'}})
 
     to_end_nodes = [x.name for x in tasks]

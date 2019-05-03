@@ -58,10 +58,30 @@
                  nodes: nodes,
                  edges: edges
              };
-            var options = {};
+
+
+
+
+            var options = {
+       physics:{
+           stabilization: true,
+       },
+       nodes: {
+         fixed:{
+           x:true,
+           y:true
+         }
+       },
+       layout: {randomSeed:0}
+  };
+
+
+
 
             // initialize your network
             var network = new vis.Network(container, data, options);
+
+
         }
 
         var filterby = 'start';
