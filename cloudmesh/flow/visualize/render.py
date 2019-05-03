@@ -61,9 +61,15 @@ def show(workflowname):
     to_end_nodes = [x.name for x in tasks]
 
     for task in tasks:
-        color = 'green'
+        color = 'violet'
         if task.status == "pending":
             color = 'lightblue'
+        elif task.status == "running":
+            color = 'orange'
+        elif task.status == "error":
+            color = 'red'
+        elif task.status == "finished":
+            color = 'green'
         nodes.append({'id': task.name, 'label': task.name, 'color': color})
         if len(task.dependencies) == 0:
             edges.append({'from': 'start', 'to': task.name, "arrows": 'to'})
