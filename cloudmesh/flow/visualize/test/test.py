@@ -1,6 +1,7 @@
-from cloudmesh.flow.WorkFlow import WorkFlowDB
+from cloudmesh.flow.worflowdb import WorkFlowDB
 from cloudmesh.flow.Node import Node
 from cloudmesh.flow.visualize import manager
+import webbrowser
 
 
 def define_flow():
@@ -80,4 +81,6 @@ list_flow("testflow2-flow")
 
 manager.start()
 
-
+flow_name = "testflow2-flow"
+url = "http://127.0.0.1:8080/flow/monitor/" + flow_name
+webbrowser.open(url)

@@ -2,6 +2,7 @@ from cloudmesh.flow.WorkFlow import WorkFlowDB
 import subprocess
 import time
 import json
+import webbrowser
 
 
 class WorkflowRunner(object):
@@ -54,6 +55,10 @@ class WorkflowRunner(object):
                 self.resolve_node(process["node"], status)
         self.start_available_nodes()
         time.sleep(3)
+
+    def visualize(self):
+        url = "http://127.0.0.1:8080/flow/monitor/" + self.flowname + "-flow"
+        webbrowser.open(url)
 
 
 if __name__ == "__main__":
