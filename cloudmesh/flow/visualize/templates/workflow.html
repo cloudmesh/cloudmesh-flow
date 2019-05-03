@@ -82,7 +82,7 @@
                   var x = queue.shift();
                   node = find_node(new_nodes, x.to);
                   if (node.id != 'end') {
-                    t.row.add([node.id, node.dependencies, node.progress, node.progress, node.modified, node.done]).draw(false);
+                    t.row.add([node.id, node.dependencies, node.progress, node.modified, node.done]).draw(false);
                     filterby = node.id;
                      nodes_after_filterby = new_edges.filter(filter_edges);
                     for(let i = 0; i < nodes_after_filterby.length; i++) {
@@ -140,7 +140,6 @@
             <tr>
                 <th>Name</th>
                 <th>Dependencies</th>
-                <th>Progress</th>
                 <th>Progress</th>
                 <th>Modified</th>
                 <th>Done</th>

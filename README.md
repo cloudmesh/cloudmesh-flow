@@ -165,14 +165,26 @@ two methods:
 To start the visualization service run the following command:
 
 ```bash
-$ cms flow visualize
+$ cms flow visualize start
 ```
-The visualization service will then be available at the address 
+The visualization rest service will then be available at the address 
 
-<http://127.0.0.1:8080/flow/
+http://127.0.0.1:8080/flow/
 
-Here you can find the list of all the submitted workflows. By
+To stop the rest service run the follwoing command:
+
+```bash
+$ cms flow visualize stop
+```
+
+At the page `http://127.0.0.1:8080/flow/` you can find the list of all the submitted workflows. 
+
+![http://127.0.0.1:8080/flow/](images/flow-visualize-home.png){#fig:flow-visualize-home}
+
+By
 selecting a workflow you can view a visualization of the workflow.
+
+![http://127.0.0.1:8080/flow/](images/flow-visualize-home.png){#fig:flow-visualize-home}
 
 A node in a visualization has a color. The color represents the status
 of the task associated with the node. If the task is pending for
