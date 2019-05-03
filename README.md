@@ -188,7 +188,10 @@ selecting a workflow you can view a visualization of the workflow.
 
 A node in a visualization has a color. The color represents the status
 of the task associated with the node. If the task is pending for
-execution, its color will be `blue` otherwise the color is `green`.
+execution, its color will be `blue` otherwise the color is `green`. On the right you can view the graph information including the 
+name of the nodes and the dependencies between nodes. The features `progress`, `modified time` and `done` are added to the visualization package but currently these data 
+are not present in the flow database
+ or if present the data-access class does not retrieve them.
 
 
 
