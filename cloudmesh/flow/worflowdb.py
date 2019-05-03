@@ -2,12 +2,16 @@ from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.flow.Node import Node
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
 
+
+
 class WorkFlowDB(object):
 
-    def __init__(self, name="workflow"):
+    def __init__(self, name="workflow", active=False):
         self.database = CmDatabase()
         self.workflow_name = name
         self.collection = self.database.collection(f"{name}-flow")
+        if active:
+            self.switch_to_active_flow()
 
     def attributes(self, name):
         data = {
@@ -18,7 +22,8 @@ class WorkFlowDB(object):
             },
             "kind": "flow",
             "cloud": self.workflow_name,
-            "name": name
+            "name": name,
+            "status": "defined"
         }
         return data
 
@@ -38,10 +43,18 @@ class WorkFlowDB(object):
         reconstructed.workflow = self.workflow_name
         reconstructed.dependencies = db_obj["dependencies"]
         reconstructed.status = db_obj.get("status", "pending")
+        reconstructed.result = db_obj.get("result", {})
         reconstructed.progress = ""
         reconstructed.modified = ""
         reconstructed.done = ""
         return reconstructed
+
+    def remove_node(self, name):
+        self.collection.delete_one({"name": name})
+        self.collection.update_many({}, {"$pull": {"dependencies": "name"}})
+
+    def remove_edge(self, node, depends_on):
+        self.collection.update_one({"name": node}, {"$pull": {"dependencies": depends_on}})
 
     def get_node(self, name=None):
         return self._node_from_db(self.collection.find_one({"name": name}))
@@ -77,7 +90,7 @@ class WorkFlowDB(object):
         started_collection = f"{self.workflow_name}-flow-active"
         self.collection = self.database.collection(started_collection)
 
-    def resolve_node_dependency(self, name=None):
+    def resolve_node_dependencies(self, name=None):
         return self.collection.update_many(
             {"dependencies": name}, {"$pull": {"dependencies": name}})
 
@@ -97,6 +110,9 @@ class WorkFlowDB(object):
             {"$out": started_collection}])
         self.switch_to_active_flow()
 
+    def add_node_result(self, nodename, result):
+        return self.collection.update_one({"name": nodename}, {"$set": {"result": result}})
+
     def add_graph(self, yamlfile):
         pass
 
@@ -113,3 +129,4 @@ class WorkFlowDB(object):
         raise NotImplementedError
         t = "the time string"
         return t
+

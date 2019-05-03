@@ -9,6 +9,7 @@ from cloudmesh.common.console import Console
 from cloudmesh.common.Printer import Printer
 from pprint import pprint
 from cloudmesh.mongo.CmDatabase import CmDatabase
+from cloudmesh.flow.visualize import manager
 
 
 class FlowCommand(PluginCommand):
@@ -27,7 +28,8 @@ class FlowCommand(PluginCommand):
                 flow node delete NODENAME
                 flow edge delete FROM TO
                 flow edge invert FROM TO
-                flow visualize
+                flow visualize start
+                flow visualize stop
 
           This command manages and executes workflows
           The default workflow is just named "workflow" but you can specify multiple
@@ -110,7 +112,12 @@ class FlowCommand(PluginCommand):
 
         elif arguments.visualize:
 
-            Console.error("vizulize not implemented")
+            if arguments["start"]:
+                manager.start()
+                print("The visualization servive started at http://127.0.0.1:8080/flow/")
+
+            elif arguments["stop"]:
+                manager.shutdown()
 
         elif arguments["delete"] and arguments.edge:
             db = WorkFlowDB(arguments.FLOWNAME)
