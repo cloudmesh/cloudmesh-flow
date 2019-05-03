@@ -184,13 +184,13 @@ At the page `http://127.0.0.1:8080/flow/` you can find the list of all the submi
 By
 selecting a workflow you can view a visualization of the workflow.
 
-![http://127.0.0.1:8080/flow/](images/flow-visualize-home.png){#fig:flow-visualize-home}
+![http://127.0.0.1:8080/flow/{workflow}](images/flow-visualize-worflow.png){#fig:flow-visualize-workflow}
 
 A node in a visualization has a color. The color represents the status
 of the task associated with the node. If the task is pending for
 execution, its color will be `blue` otherwise the color is `green`.
 
-> ADD A SCREENSHOT AND PUT THE IMAGE IN an images/ dir
+
 
 
 ## Refernces
