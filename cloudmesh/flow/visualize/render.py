@@ -23,15 +23,21 @@ def refresh(workflowname):
     nodes = []
     edges = []
 
-    nodes.append({'id': 'start', 'label': 'start', 'color' : 'yellow', 'x' : 40, 'y' : 200})
+    nodes.append({'id': 'start', 'label': 'start', 'color': 'yellow', 'x': 132, 'y': 286})
     nodes.append({'id': 'end', 'label': 'end', 'color' : 'indigo', 'font': {'color':'white'}})
 
     to_end_nodes = [x.name for x in tasks]
 
     for task in tasks:
-        color = 'green'
+        color = 'violet'
         if task.status == "pending":
             color = 'lightblue'
+        elif task.status == "running":
+            color = 'orange'
+        elif task.status == "error":
+            color = 'red'
+        elif task.status == "finished":
+            color = 'green'
         nodes.append({'id': task.name, 'label': task.name, 'color': color, "modified" : task.modified , "dependencies" : task.dependencies, "progress" : task.progress, "done" : task.done})
         if len(task.dependencies) == 0:
             edges.append({'from': 'start', 'to': task.name, "arrows": 'to'})
