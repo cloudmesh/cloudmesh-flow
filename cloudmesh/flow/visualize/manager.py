@@ -11,4 +11,3 @@ def start():
     os.system('python server.py')
 
 
-start()
