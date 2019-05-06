@@ -1,3 +1,6 @@
 graphviz
 lark-parser
 oyaml
+cloudmesh-common
+cloudmesh-cmd5
+cloudmesh-sys
