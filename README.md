@@ -165,20 +165,37 @@ two methods:
 To start the visualization service run the following command:
 
 ```bash
-$ cms flow visualize
+$ cms flow visualize start
 ```
-The visualization service will then be available at the address 
+The visualization rest service will then be available at the address 
 
-<http://127.0.0.1:8080/flow/
+http://127.0.0.1:8080/flow/
 
-Here you can find the list of all the submitted workflows. By
-selecting a workflow you can view a visualization of the workflow.
+To stop the rest service run the follwoing command:
+
+```bash
+$ cms flow visualize stop
+```
+
+At the page `http://127.0.0.1:8080/flow/` you can find the list of all the submitted workflows. 
+
+![http://127.0.0.1:8080/flow/](images/flow-visualize-home.png){#fig:flow-visualize-home}
+
+By
+selecting a workflow you can view a visualization of the workflow. The visualization of the workflow is getting updated every three seconds.
+
+![http://127.0.0.1:8080/flow/{workflow}](images/flow-visualize-workflow.png){#fig:flow-visualize-workflow}
 
 A node in a visualization has a color. The color represents the status
 of the task associated with the node. If the task is pending for
-execution, its color will be `blue` otherwise the color is `green`.
+execution, its color will be `blue`, if it is `running` then the color is `orange` and 
+ if it is `finished` then its color is `green` and if it is in 
+  `error` state, then its color is `red`. Otherwise the color is `violet`. On the right you can view the graph information including the 
+name of the nodes and the dependencies between nodes. The features `progress`, `modified time` and `done` are added to the visualization package but currently these data 
+are not present in the flow database
+ or if present the data-access class does not retrieve them.
 
-> ADD A SCREENSHOT AND PUT THE IMAGE IN an images/ dir
+
 
 
 ## Refernces
