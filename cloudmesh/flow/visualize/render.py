@@ -23,8 +23,18 @@ def refresh(workflowname):
     nodes = []
     edges = []
 
-    nodes.append({'id': 'start', 'label': 'start', 'color': 'yellow', 'x': 132, 'y': 286})
-    nodes.append({'id': 'end', 'label': 'end', 'color' : 'indigo', 'font': {'color':'white'}})
+    nodes.append({'id': 'start',
+                  'label': 'start',
+                  'color': 'yellow',
+                  'shape': 'box',
+                  'shadow': True,
+                  'x': 132, 'y': 286})
+    nodes.append({'id': 'end',
+                  'label': 'end',
+                  'color' : 'indigo',
+                  'shape': 'box',
+                  'shadow': True,
+                  'font': {'color':'white'}})
 
     to_end_nodes = [x.name for x in tasks]
 
@@ -38,7 +48,15 @@ def refresh(workflowname):
             color = 'red'
         elif task.status == "finished":
             color = 'green'
-        nodes.append({'id': task.name, 'label': task.name, 'color': color, "modified" : task.modified , "dependencies" : task.dependencies, "progress" : task.progress, "done" : task.done})
+        nodes.append({'id': task.name,
+                      'label': task.name,
+                      'color': color,
+                      "modified" : task.modified ,
+                      "dependencies" : task.dependencies,
+                      "progress" : task.progress,
+                      'shape': 'box',
+                      'shadow': True,
+                      "done" : task.done})
         if len(task.dependencies) == 0:
             edges.append({'from': 'start', 'to': task.name, "arrows": 'to'})
         for dependency in task.dependencies:
@@ -61,8 +79,18 @@ def show(workflowname):
     nodes = []
     edges = []
 
-    nodes.append({'id': 'start', 'label': 'start', 'color' : 'yellow', 'x': 132, 'y': 286})
-    nodes.append({'id': 'end', 'label': 'end', 'color' : 'indigo', 'font': {'color':'white'}})
+    nodes.append({'id': 'start',
+                  'label': 'start',
+                  'color' : 'yellow',
+                  'shape': 'box',
+                  'shadow': True,
+                  'x': 132, 'y': 286})
+    nodes.append({'id': 'end',
+                  'label': 'end',
+                  'color' : 'indigo',
+                  'shape': 'box',
+                  'shadow': True,
+                  'font': {'color':'white'}})
 
     to_end_nodes = [x.name for x in tasks]
 
@@ -101,10 +129,20 @@ def showFromDirectory(workflowname):
     edges = []
 
     for task in tasks:
-        nodes.append({'id': task, 'label': task})
+        nodes.append({'id': task,
+                      'label': task,
+                      'shadow': True,
+                      'shape': 'box'}
+        )
 
-    nodes.append({'id': 'start', 'label': 'start'})
-    nodes.append({'id': 'end', 'label': 'end'})
+    nodes.append({'id': 'start',
+                  'shape': 'box',
+                  'shadow': True,
+                  'label': 'start'})
+    nodes.append({'id': 'end',
+                  'shape': 'box',
+                  'shadow': True,
+                  'label': 'end'})
 
     flows = data["flow"].split("|")
     for flow in flows:
