@@ -1,6 +1,6 @@
 from cloudmesh.compute.aws import Provider as AWSProvider
 from cloudmesh.compute.azure import AzProvider
-from cloudmesh.flow.FlowDecorator import BaseWorkFlow
+from cloudmesh.flow.WorkFlow import BaseWorkFlow
 
 class MyFlow(BaseWorkFlow):
     def spawn_aws(self):

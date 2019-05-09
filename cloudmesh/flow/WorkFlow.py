@@ -9,7 +9,7 @@ from lark import Lark, Visitor
 from lark.tree import pydot__tree_to_png
 import oyaml as yaml
 from cloudmesh.DEBUG import VERBOSE
-
+import inspect
 
 grammar = """
     flownode: /[a-zA-Z]+/
@@ -24,7 +24,46 @@ grammar = """
     %ignore WS
 """
 
+class Analyze:
+
+    @staticmethod
+    def nodes(classname):
+        names = []
+        method_list = [func for func in dir(classname) if callable(getattr(classname, func))]
+        for name in method_list:
+            if name.startswith("__"):
+                pass
+            elif name in ['runCommand', 'save_result_to_db']:
+                pass
+            else:
+                names.append(name)
+        return names
+
+
+
+
 parser = Lark(grammar, start = "expr")
+
+
+class BaseWorkFlow():
+    def __init__(self, flowfile):
+        self.flowname = flowfile[:flowfile.find("-")]
+
+    def save_result_to_db(self, nodeName, result):
+        print("saving result to", self.flowname, result)
+        db = WorkFlowDB(self.flowname, True)
+        db.add_node_result(nodeName, result)
+
+
+    def runCommand(self, commandName):
+        method = None
+        for (name, func) in inspect.getmembers(self):
+            if name == commandName:
+                method = func
+        result = method()
+        self.save_result_to_db(commandName, result)
+        return result
+
 
 class WorkFlowDB(object):
 

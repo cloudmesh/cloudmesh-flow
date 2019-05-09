@@ -1,6 +1,6 @@
 import sys
 import time
-from cloudmesh.flow.FlowDecorator import BaseWorkFlow
+from cloudmesh.flow.WorkFlow import BaseWorkFlow
 
 
 class MyFlow(BaseWorkFlow):

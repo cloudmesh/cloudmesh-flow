@@ -5,7 +5,6 @@ class BaseWorkFlow():
     def __init__(self, flowfile):
         self.flowname = flowfile[:flowfile.find("-")]
 
-
     def save_result_to_db(self, nodeName, result):
         print("saving result to", self.flowname, result)
         db = WorkFlowDB(self.flowname, True)

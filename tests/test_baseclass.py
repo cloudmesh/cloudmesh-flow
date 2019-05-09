@@ -11,7 +11,7 @@ import os
 
 from cloudmesh.common.ConfigDict import ConfigDict
 from cloudmesh.common.util import HEADING
-from cloudmesh.flow.FlowDecorator import BaseWorkFlow
+from cloudmesh.flow.WorkFlow import BaseWorkFlow
 from cloudmesh.flow.WorkFlow import WorkFlowDB
 import pytest
 

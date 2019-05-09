@@ -1,5 +1,5 @@
 from cloudmesh.compute.vm.Provider import Provider
-from cloudmesh.flow.FlowDecorator import BaseWorkFlow
+from cloudmesh.flow.WorkFlow import BaseWorkFlow
 
 #
 # we assume image is ubuntu 19.04 in cloudmesh4.yaml
