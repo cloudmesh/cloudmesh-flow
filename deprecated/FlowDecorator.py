@@ -1,5 +1,5 @@
 import inspect
-from cloudmesh.flow.WorkFlow import WorkFlowDB
+from cloudmesh.flow.Flow import FlowDatabase
 
 class BaseWorkFlow():
     def __init__(self, flowfile):
@@ -7,7 +7,7 @@ class BaseWorkFlow():
 
     def save_result_to_db(self, nodeName, result):
         print("saving result to", self.flowname, result)
-        db = WorkFlowDB(self.flowname, True)
+        db = FlowDatabase(self.flowname, True)
         db.add_node_result(nodeName, result)
 
 

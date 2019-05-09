@@ -1,4 +1,4 @@
-from cloudmesh.flow.WorkFlow import WorkFlowDB
+from cloudmesh.flow.Flow import FlowDatabase
 import subprocess
 import time
 import json
@@ -7,7 +7,7 @@ from cloudmesh.common.console import Console
 import sys
 
 
-class WorkflowRunner(object):
+class FlowRunner(object):
     def __init__(self, flowname, filename=None):
         self.filename = filename or f"{flowname}-flow.py"
         self.flowname = flowname
@@ -16,7 +16,7 @@ class WorkflowRunner(object):
             Console.error("The floname is not defined")
             sys.exit(1)
 
-        self.db = WorkFlowDB(flowname)
+        self.db = FlowDatabase(flowname)
         self.running_jobs = []
 
     def start_available_nodes(self):
@@ -69,5 +69,5 @@ class WorkflowRunner(object):
 
 
 if __name__ == "__main__":
-    runner = WorkflowRunner("flow")
+    runner = FlowRunner("flow")
     runner.start_flow()

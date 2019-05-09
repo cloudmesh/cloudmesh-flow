@@ -10,6 +10,7 @@ from lark.tree import pydot__tree_to_png
 import oyaml as yaml
 from cloudmesh.DEBUG import VERBOSE
 import inspect
+from cloudmesh.common.console import Console
 
 grammar = """
     flownode: /[a-zA-Z]+/
@@ -24,48 +25,113 @@ grammar = """
     %ignore WS
 """
 
-class Analyze:
+class Get:
 
     @staticmethod
     def nodes(classname):
         names = []
         method_list = [func for func in dir(classname) if callable(getattr(classname, func))]
         for name in method_list:
-            if name.startswith("__"):
-                pass
-            elif name in ['runCommand', 'save_result_to_db']:
+            if name.startswith("_"):
                 pass
             else:
                 names.append(name)
         return names
 
+    @staticmethod
+    def name(classname):
+        s = classname.__name__
+        return f"{s}" # flow will be appended later
 
+    @staticmethod
+    def edges(classname):
+        return classname.edges
+
+class Put:
+
+    @staticmethod
+    def nodes(name, nodes):
+
+        db = FlowDatabase(name)
+
+        for node in nodes:
+            node = Node(node)
+            node.workflow = name
+            try:
+                db.add_node(node.toDict())
+            except Exception as e:
+                Console.error(str(e))
+
+    @staticmethod
+    def edges(name, edges):
+        db = FlowDatabase(name)
+        for edge in edges:
+            try:
+                db.add_edge(edge[0], edge[1])
+            except Exception as e:
+                Console.error(str(e))
+
+
+    @staticmethod
+    def upload(classname):
+        nodes = Get.nodes(classname)
+        name = Get.name(classname)
+        edges = Get.edges(classname)
+
+        Put.nodes(name, nodes)
+        Put.edges(name, edges)
 
 
 parser = Lark(grammar, start = "expr")
 
 
-class BaseWorkFlow():
-    def __init__(self, flowfile):
-        self.flowname = flowfile[:flowfile.find("-")]
+class Flow():
+    def __init__(self, arguments):
 
-    def save_result_to_db(self, nodeName, result):
+        self.flowfile = arguments[0]
+        self.flowname = self.flowfile[:self.flowfile.find("-flow")]
+
+        if len(arguments) == 1:
+            self._upload()
+        if len(arguments) == 2:
+            self.node = arguments[1]
+            self._run(self.node)
+
+    def _save(self, task_name, result):
+        """
+        saves the results to the database into the task with the name provided.
+        :param task_name: The name of the task
+        :type task_name: string
+        :param result: The dict of the result
+        :type result: dict
+        :return: None
+        :rtype: None
+        """
         print("saving result to", self.flowname, result)
-        db = WorkFlowDB(self.flowname, True)
-        db.add_node_result(nodeName, result)
+        db = FlowDatabase(self.flowname, True)
+        db.add_node_result(task_name, result)
 
 
-    def runCommand(self, commandName):
+    def _run(self, task_name):
+        """
+        execute the python method in the class with the given task_name
+        :param task_name: the name of the task
+        :type task_name: string
+        :return: the dict after the execution of the task
+        :rtype: dict
+        """
         method = None
         for (name, func) in inspect.getmembers(self):
-            if name == commandName:
+            if name == task_name:
                 method = func
         result = method()
-        self.save_result_to_db(commandName, result)
+        self._save(task_name, result)
         return result
 
+    def _upload(self):
+        Put.upload(self.__class__)
 
-class WorkFlowDB(object):
+class FlowDatabase(object):
 
     def __init__(self, name="workflow", active = False):
         self.database = CmDatabase()
@@ -193,6 +259,9 @@ class WorkFlowDB(object):
         :rtype: string
         """
         raise NotImplementedError
+        # find all modified
+
+        # return self.collection.find(query)
         t = "the time string"
         return t
 
@@ -247,11 +316,9 @@ class FlowConstructor(Visitor):
             #print(val.data, val.children)
             return self.resolve_to_node(val.children[-1])
 
-
-
 def parse_string_to_workflow(flowstring, flowname):
     tree = parser.parse(flowstring)
-    db = WorkFlowDB(flowname)
+    db = FlowDatabase(flowname)
     flow = FlowConstructor()
     flow.db = db
     flow.flowname = flowname
@@ -268,7 +335,7 @@ def parse_yaml_to_workflow(yaml_file):
 if __name__ == "__main__":
     flowstring = sys.argv[2]
     flowname = sys.argv[1]
-    db = WorkFlowDB()
+    db = FlowDatabase()
     flows = db.list_all_workflows()
     for flow in flows:
         print(flow)

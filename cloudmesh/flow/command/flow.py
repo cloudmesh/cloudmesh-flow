@@ -1,8 +1,8 @@
 from __future__ import print_function
 from cloudmesh.shell.command import command
 from cloudmesh.shell.command import PluginCommand, map_parameters
-from cloudmesh.flow.WorkFlow import  WorkFlowDB, parse_string_to_workflow, parse_yaml_to_workflow
-from cloudmesh.flow.WorkflowRunner import WorkflowRunner
+from cloudmesh.flow.Flow import  FlowDatabase, parse_string_to_workflow, parse_yaml_to_workflow
+from cloudmesh.flow.FlowRunner import FlowRunner
 from cloudmesh.DEBUG import VERBOSE
 from cloudmesh.flow.Node import Node
 from cloudmesh.common.console import Console
@@ -20,7 +20,7 @@ class FlowCommand(PluginCommand):
         """
         ::
           Usage:
-                flow list [--flowname=FLOWNAME] [--output=FORMAT]
+                flow list [--flow=NAME] [--output=FORMAT]
                 flow add [--flowname=FLOWNAME] --flowfile=FILENAME
                 flow run [--flowname=FLOWNAME] [--flowfile=FILENAME]
                 flow node add NODENAME [--flowname=FLOWNAME]
@@ -44,11 +44,13 @@ class FlowCommand(PluginCommand):
               NODE       the name of the node
 
           Options:
+              --flow=NAME   the name or the flow
               --file    specify the file
               --log     specify the log file
               --flowname=FLOWNAME   the name or the workflow
               --output=OUTPUT       the output format [default: table]
         """
+
 
         arguments.FLOWNAME = arguments["--flowname"] or "workflow"
         arguments.FLOWFILE = arguments["--flowfile"] or f"{arguments.FLOWNAME}-flow.py"
@@ -59,7 +61,7 @@ class FlowCommand(PluginCommand):
 
         if arguments["add"] and arguments.edge:
 
-            db = WorkFlowDB(arguments.FLOWNAME)
+            db = FlowDatabase(arguments.FLOWNAME)
             db.add_edge(arguments.FROM, arguments.TO)
 
         elif arguments["add"]:
@@ -71,7 +73,7 @@ class FlowCommand(PluginCommand):
                 node = Node(arguments.NODENAME)
                 node.workflow = arguments.FLOWNAME
                 try:
-                    db = WorkFlowDB(arguments.FLOWNAME)
+                    db = FlowDatabase(arguments.FLOWNAME)
                     db.add_node(node.toDict())
                 except Exception as e:
                     print ("error executing", e)
@@ -80,35 +82,52 @@ class FlowCommand(PluginCommand):
 
                 filename = arguments["--flowfile"]
                 print("load from file", filename)
-                lparse_yaml_to_workflow(filename)
+                parse_yaml_to_workflow(filename)
+
 
         elif arguments["list"]:
 
-            #print("listing nodes!")
-            #db = WorkFlowDB(arguments.FLOWNAME)
-            #print(db.collection)
-            #nodes = db.list_nodes()
-            #pprint (nodes)
-            #for node in nodes:
-            #    print(node)
-
+            arguments.flow = arguments["--flow"] or "workflow"
             db = CmDatabase()
-            nodes = db.find(collection=f"{arguments.FLOWNAME}-flow")
+
+
+
+            name = arguments["--flow"]
+
+            if name is not None:
+                flows = [name]
+            else:
+                candidates = db.collections()
+                flows = []
+                for flow in candidates:
+                    if flow.endswith("-flow"):
+                        flows.append(flow)
+
+            entries = []
+            for name in flows:
+                nodes = db.find(collection=f"{name}-flow")
+
+                for node in nodes:
+                    node["dependencies"] = ", ".join(node["dependencies"])
+                entries = entries + nodes
 
             order = ["name", "workflow", "dependencies", "cm.modified"]
             header = ["Name", "Workflow", "Dependencies", "Modified"]
 
-            for node in nodes:
-                node["dependencies"] = ", ".join(node["dependencies"])
+
             print(Printer.flatwrite(nodes,
                                     order=order,
                                     header=header,
                                     output=arguments.output))
 
 
-        elif arguments.run:
 
-            runner = WorkflowRunner(arguments.FLOWNAME, arguments.FLOWFILE)
+
+
+
+        elif arguments._run:
+
+            runner = FlowRunner(arguments.FLOWNAME, arguments.FLOWFILE)
             runner.start_flow()
 
         elif arguments.visualize:
@@ -121,17 +140,17 @@ class FlowCommand(PluginCommand):
                 manager.shutdown()
 
         elif arguments["delete"] and arguments.edge:
-            db = WorkFlowDB(arguments.FLOWNAME)
+            db = FlowDatabase(arguments.FLOWNAME)
             db.remove_edge(arguments.FROM, arguments.TO)
 
 
         elif arguments["delete"] and arguments.node:
-            db = WorkFlowDB(arguments.FLOWNAME)
+            db = FlowDatabase(arguments.FLOWNAME)
             db.remove_node(arguments.NODENAME)
 
 
         elif arguments["invert"] and arguments.edge:
-            db = WorkFlowDB(arguments.FLOWNAME)
+            db = FlowDatabase(arguments.FLOWNAME)
             db.remove_edge(arguments.TO, arguments.FROM)
             db.add_edge(arguments.FROM, arguments.TO)
 
