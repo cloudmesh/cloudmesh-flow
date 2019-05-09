@@ -18,21 +18,27 @@
     </script>
     <style type="text/css">
         #mynetwork {
-            width: 600px;
+            display: block;
+            margin-left: 1%;
+            margin-right: 1%;
+            padding: 10px;
+            width: 96%;
+            allign: center;
             height: 400px;
             border: 1px solid lightgray;
         }
         .column {
-  float: left;
-  width: 50%;
-  padding: 10px;
-
-}
-.row:after {
-  content: "";
-  display: table;
-  clear: both;
-}
+            display: block;
+            margin-left: 1%;
+            margin-right: 1%;
+            padding: 10px;
+            width: 96%;
+        }
+        .row:after {
+          content: "";
+          display: table;
+          clear: both;
+        }
 
 
 
@@ -57,30 +63,24 @@
             var data = {
                  nodes: nodes,
                  edges: edges
-             };
-
-
+            };
 
 
             var options = {
-       physics:{
-           stabilization: true,
-       },
-       nodes: {
-         fixed:{
-           x:true,
-           y:true
-         }
-       },
-       layout: {randomSeed:0}
-  };
-
-
-
+               physics:{
+                   stabilization: true,
+               },
+               nodes: {
+                 fixed:{
+                   x:true,
+                   y:true
+                 }
+               },
+               layout: {randomSeed:0}
+            };
 
             // initialize your network
             var network = new vis.Network(container, data, options);
-
 
         }
 
@@ -102,7 +102,11 @@
                   var x = queue.shift();
                   node = find_node(new_nodes, x.to);
                   if (node.id != 'end') {
-                    t.row.add([node.id, node.dependencies, node.progress, node.modified, node.done]).draw(false);
+                    t.row.add([node.id,
+                               node.dependencies,
+                               node.progress,
+                               node.modified,
+                               node.done]).draw(false);
                     filterby = node.id;
                      nodes_after_filterby = new_edges.filter(filter_edges);
                     for(let i = 0; i < nodes_after_filterby.length; i++) {
@@ -151,11 +155,12 @@
     </script>
 </head>
 <body>
+<h1>&nbsp Cloudmesh Workflow</h1>
 <div class="row">
     <div id="mynetwork" class="column"></div>
     <div class="column">
         <table id="flow" class="display">
-            <caption>Monitor workflow</caption>
+            <caption>Workflow Table</caption>
             <thead>
             <tr>
                 <th>Name</th>

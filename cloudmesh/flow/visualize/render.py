@@ -4,19 +4,46 @@ import oyaml as yaml
 from os import walk
 from cloudmesh.flow.worflowdb import WorkFlowDB
 
+class Node:
 
-def status_color(task):
-    color = 'violet'
-    if task.status == "pending":
-        color = 'lightblue'
-    elif task.status == "running":
-        color = 'orange'
-    elif task.status == "error":
-        color = 'red'
-    elif task.status == "finished":
-        color = 'green'
-    return color
+    @staticmethod
+    def color(task):
+        color = 'violet'
+        if task.status == "pending":
+            color = 'lightblue'
+        elif task.status == "running":
+            color = 'orange'
+        elif task.status == "error":
+            color = 'red'
+        elif task.status == "finished":
+            color = 'green'
+        return color
 
+    @staticmethod
+    def properties(d):
+        d['label'] = d['id']
+        if d['id'] in ['start']:
+            d['shape'] =  'diamond'
+            d['color']= 'yellow'
+        elif d['id'] in ['end']:
+            d['color']= 'grey'
+            d['shape'] =  'diamond'
+        else:
+            d['shape'] = 'box'
+            d['widthConstraint'] = 100
+        d['font.size'] = '24'
+        d['font.color'] = 'black'
+        d['font.face'] = 'arial'
+        d['value'] = 2
+        d['shadow'] = True
+        return d
+
+    @staticmethod
+    def start_end():
+        nodes = [
+            Node.properties({'id': 'start', 'x': 0, 'y': 0}),
+            Node.properties({'id': 'end', 'x': 300})]
+        return nodes
 
 def get_workflow_names():
     workflows = []
@@ -29,57 +56,35 @@ def get_workflow_names():
     return jsonify(workflows)
 
 
-def form(d):
-    d['font.size'] = '24'
-    d['font.color'] = 'black'
-    d['font.face'] = 'arial'
-    d['shadow'] = True
-    return d
 
-def start_end():
-    nodes = []
-    nodes.append(form({'id': 'start',
-                  'label': 'start',
-                  'color': 'yellow',
-                  'shape': 'diamond',
-                  'value': 2,
-                  'x': 132, 'y': 286}))
-    nodes.append(form({'id': 'end',
-                  'label': 'end',
-                  'color' : 'grey',
-                  'shape': 'diamond',
-                  'value': 2,
-                  }))
-    return nodes
+
 
 def refresh(workflowname):
     workflowname = workflowname[:-5]
     mydb = WorkFlowDB(workflowname)
     tasks = mydb.list_nodes()
 
-    nodes = start_end()
+    nodes = Node.start_end()
     edges = []
 
 
     to_end_nodes = [x.name for x in tasks]
 
     for task in tasks:
-        nodes.append(form({'id': task.name,
-                      'label': task.name,
-                      'color': status_color(task),
+        nodes.append(Node.properties({'id': task.name,
+                      'color': Node.color(task),
                       "modified" : task.modified ,
                       "dependencies" : task.dependencies,
                       "progress" : task.progress,
-                      'shape': 'box',
                       "done" : task.done}))
         if len(task.dependencies) == 0:
-            edges.append({'from': 'start', 'to': task.name, "arrows": 'to'})
+            edges.append({'from': 'start', 'to': task.name, "arrows": 'to', 'width': 2})
         for dependency in task.dependencies:
-            edges.append({'from': dependency, 'to': task.name, "arrows": 'to'})
+            edges.append({'from': dependency, 'to': task.name, "arrows": 'to', 'width': 2})
             to_end_nodes.remove(dependency)
 
     for end in to_end_nodes:
-        edges.append({'from': end, 'to': 'end', "arrows": 'to'})
+        edges.append({'from': end, 'to': 'end', "arrows": 'to', 'width': 2})
 
     flow = []
     flow.append({"nodes" : nodes, "edges" : edges})
@@ -91,23 +96,21 @@ def show(workflowname):
     mydb = WorkFlowDB(workflowname)
     tasks = mydb.list_nodes()
 
-    nodes = start_end()
+    nodes = Node.start_end()
     edges = []
 
     to_end_nodes = [x.name for x in tasks]
 
     for task in tasks:
-        nodes.append(form({'id': task.name,
-                      'label': task.name,
-                      'color': status_color(task)}))
+        nodes.append(Node.properties({'id': task.name, 'color': Node.color(task)}))
         if len(task.dependencies) == 0:
-            edges.append({'from': 'start', 'to': task.name, "arrows": 'to'})
+            edges.append({'from': 'start', 'to': task.name, "arrows": 'to', 'width': 2})
         for dependency in task.dependencies:
-            edges.append({'from': dependency, 'to': task.name, "arrows": 'to'})
+            edges.append({'from': dependency, 'to': task.name, "arrows": 'to', 'width': 2})
             to_end_nodes.remove(dependency)
 
     for end in to_end_nodes:
-        edges.append({'from': end, 'to': 'end', "arrows": 'to'})
+        edges.append({'from': end, 'to': 'end', "arrows": 'to', 'width': 2})
 
     return render_template("workflow.html", nodes=nodes, edges=edges)
 
@@ -120,22 +123,18 @@ def showFromDirectory(workflowname):
     for task in tasks:
         print(task)
 
-    nodes = start_end()
+    nodes = Node.start_end()
     edges = []
 
     for task in tasks:
-        nodes.append(form({'id': task,
-                      'label': task,
-                      'shape': 'box'
-                      })
-        )
+        nodes.append(Node.properties({'id': task}))
 
     flows = data["flow"].split("|")
     for flow in flows:
         arrows = flow.split(";")
 
         for i in range(0, len(arrows) - 1):
-            edges.append({'from': arrows[i], 'to': arrows[i + 1], "arrows": 'to'})
+            edges.append({'from': arrows[i], 'to': arrows[i + 1], "arrows": 'to', 'width': 2})
 
     return render_template("workflow.html", nodes=nodes, edges=edges)
 
