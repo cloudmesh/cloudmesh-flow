@@ -153,11 +153,11 @@ This makes it so the flow runner is able to call your methods. Anything you retu
 
 The package `cloudmesh.flow.visualize` visualizes the workflows that
 have been created by the `cloudmesh.flow` package.  This package
-consists of a rest s ervice which essentially provides the following
+consists of a rest service which essentially provides the following
 two methods:
 
 * `/list` method which lists the names of all the workflows
-* `/monitor/{workflowname}` method which visualized the workflow named
+* `/monitor/{workflowname}` method which visualizes the workflow named
   by `{workflowname}`
 
 ### Start the visualization service
