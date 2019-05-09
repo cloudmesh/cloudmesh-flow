@@ -24,9 +24,10 @@ $ pip install -e .
 The commands then should be available by calling the flow commands via
 `cms`. 
 
-The first thing you have to do is to start the cloudmesh database in which we
-store information about the tasks as well as their status throughout the
-execution. If you have not yet started it please execute:
+The first thing you have to do is to start the cloudmesh database in
+which we store information about the tasks as well as their status
+throughout the execution. If you have not yet started it please
+execute:
 
 ```bash
 $ cms admin mongo start
@@ -129,15 +130,29 @@ Node `a` is joined sequentially with node `c` and in parallel with
 node `b`.
 
 #### Adding a Flow String
+
 Currently only supported in a YAML file.
 
 #### Adding a Flow YAML Definition
-You can also specify a flow in a YAML file. The file must have two properties, flowstring and flowname. This allows you to add an entire flow at once unders a specfic name. See the examples directory for details. 
+
+You can also specify a flow in a YAML file. The file must have two
+properties, flowstring and flowname. This allows you to add an entire
+flow at once unders a specfic name. See the examples directory for
+details.
 
 ## Running Flows
-Workflows nodes correspond to Python functions that are attached to specific workflow classes. To run a workflow, you need to specify the task definitions. The easiest way to see this in action is in the [examples directory](https://github.com/cloudmesh/cloudmesh-flow/tree/master/cloudmesh/flow/example).
 
-Defining a Workflow is simple: declare a class with one method for each node, and have the class inherit from the BaseWorkFlow base class. The method names should correspond to your node names, for example if you node is named "a" you must define a method named `a()` At the bottom of your file, copy the _entry point code_ that is listed on each of the example files:
+Workflows nodes correspond to Python functions that are attached to
+specific workflow classes. To run a workflow, you need to specify the
+task definitions. The easiest way to see this in action is in the
+[examples directory](https://github.com/cloudmesh/cloudmesh-flow/tree/master/cloudmesh/flow/example).
+
+Defining a Workflow is simple: declare a class with one method for
+each node, and have the class inherit from the BaseWorkFlow base
+class. The method names should correspond to your node names, for
+example if you node is named "a" you must define a method named `a()`
+At the bottom of your file, copy the _entry point code_ that is listed
+on each of the example files:
 
 ```python
 
@@ -147,7 +162,14 @@ if __name__ == "__main__":
     
 ```
 
-This makes it so the flow runner is able to call your methods. Anything you return at the end of your function will be inserted into the database as the result of running that node. You should return a dict, which will be accessible via the `result` field in the db. Note that your filename should be of the form `$flowname-flow.py`. This makes it so the result parser can grab the result of your workflow methods and insert them into the database corresponding to the current run of $flowname.
+This makes it so the flow runner is able to call your
+methods. Anything you return at the end of your function will be
+inserted into the database as the result of running that node. You
+should return a dict, which will be accessible via the `result` field
+in the db. Note that your filename should be of the form
+`$flowname-flow.py`. This makes it so the result parser can grab the
+result of your workflow methods and insert them into the database
+corresponding to the current run of $flowname.
 
 ## Visualizing
 
@@ -177,23 +199,27 @@ To stop the rest service run the follwoing command:
 $ cms flow visualize stop
 ```
 
-At the page `http://127.0.0.1:8080/flow/` you can find the list of all the submitted workflows. 
+At the page `http://127.0.0.1:8080/flow/` you can find the list of all
+the submitted workflows.
 
 ![http://127.0.0.1:8080/flow/](images/flow-visualize-home.png){#fig:flow-visualize-home}
 
-By
-selecting a workflow you can view a visualization of the workflow. The visualization of the workflow is getting updated every three seconds.
+By selecting a workflow you can view a visualization of the
+workflow. The visualization of the workflow is getting updated every
+three seconds.
 
 ![http://127.0.0.1:8080/flow/{workflow}](images/flow-visualize-workflow.png){#fig:flow-visualize-workflow}
 
 A node in a visualization has a color. The color represents the status
 of the task associated with the node. If the task is pending for
-execution, its color will be `blue`, if it is `running` then the color is `orange` and 
- if it is `finished` then its color is `green` and if it is in 
-  `error` state, then its color is `red`. Otherwise the color is `violet`. On the right you can view the graph information including the 
-name of the nodes and the dependencies between nodes. The features `progress`, `modified time` and `done` are added to the visualization package but currently these data 
-are not present in the flow database
- or if present the data-access class does not retrieve them.
+execution, its color will be `blue`, if it is `running` then the color
+is `orange` and if it is `finished` then its color is `green` and if
+it is in `error` state, then its color is `red`. Otherwise the color
+is `violet`. On the right you can view the graph information including
+the name of the nodes and the dependencies between nodes. The features
+`progress`, `modified time` and `done` are added to the visualization
+package but currently these data are not present in the flow database
+or if present the data-access class does not retrieve them.
 
 
 
