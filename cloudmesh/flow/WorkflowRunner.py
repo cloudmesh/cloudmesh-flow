@@ -3,14 +3,21 @@ import subprocess
 import time
 import json
 import webbrowser
+from cloudmesh.common.console import Console
+import sys
 
 
 class WorkflowRunner(object):
-    def __init__(self, flowname, filename = None):
+    def __init__(self, flowname, filename=None):
+        self.filename = filename or f"{flowname}-flow.py"
         self.flowname = flowname
+
+        if self.flowname is None:
+            Console.error("The floname is not defined")
+            sys.exit(1)
+
         self.db = WorkFlowDB(flowname)
         self.running_jobs = []
-        self.filename = filename or f"{flowname}-flow.py"
 
     def start_available_nodes(self):
         available_nodes = self.db.find_root_nodes()

@@ -30,6 +30,7 @@ class FlowCommand(PluginCommand):
                 flow edge invert FROM TO
                 flow visualize start
                 flow visualize stop
+                flow refresh
 
           This command manages and executes workflows
           The default workflow is just named "workflow" but you can specify multiple
@@ -133,6 +134,11 @@ class FlowCommand(PluginCommand):
             db = WorkFlowDB(arguments.FLOWNAME)
             db.remove_edge(arguments.TO, arguments.FROM)
             db.add_edge(arguments.FROM, arguments.TO)
+
+        elif arguments.refresh:
+
+            raise NotImplementedError
+            # shuld refresh the viz
 
 
 

@@ -1,7 +1,7 @@
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.flow.Node import Node
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
-
+from cloudmesh.DEBUG import VERBOSE
 
 
 class WorkFlowDB(object):
@@ -31,6 +31,7 @@ class WorkFlowDB(object):
     def add_node(self, node):
         name = node["name"]
         node.update(self.attributes(name))
+        VERBOSE(node)
         return node
 
     def add_edge(self, node, depends_on):

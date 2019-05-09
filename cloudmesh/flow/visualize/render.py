@@ -117,7 +117,7 @@ def show(workflowname):
 def showFromDirectory(workflowname):
     filename = "workflows/" + workflowname + ".yaml"
     with open(filename, "r") as stream:
-        data = yaml.load(stream)
+        data = yaml.load(stream, Loader=yaml.SafeLoader)
 
     tasks = data["tasks"]
     for task in tasks:
@@ -143,7 +143,7 @@ def update(workflow):
     flow = workflow.get("flowyaml", None)
     workflowname = workflow.get("name", None)
     filename = "workflows/" + workflowname + ".yaml"
-    data = yaml.load(flow)
+    data = yaml.load(flow, Loader=yaml.SafeLoader)
     with open(filename, 'w') as outfile:
         yaml.dump(data, outfile, default_flow_style=False)
     show(workflowname)

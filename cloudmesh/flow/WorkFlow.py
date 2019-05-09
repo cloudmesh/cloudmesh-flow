@@ -8,6 +8,8 @@ from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
 from lark import Lark, Visitor
 from lark.tree import pydot__tree_to_png
 import oyaml as yaml
+from cloudmesh.DEBUG import VERBOSE
+
 
 grammar = """
     flownode: /[a-zA-Z]+/
@@ -51,9 +53,15 @@ class WorkFlowDB(object):
     def add_node(self, node):
         name = node["name"]
         node.update(self.attributes(name))
+        VERBOSE(node)
         return node
 
     def add_edge(self, node, depends_on):
+        edge = {
+            "node": node,
+            "depends_on": depends_on
+        }
+        VERBOSE(edge)
         self.collection.update_one(
             {"name" : node},
             {"$push" : {"dependencies" : depends_on}})
@@ -115,6 +123,7 @@ class WorkFlowDB(object):
         pass
 
     def start_flow(self):
+        VERBOSE("START")
         started_collection = f"{self.workflow_name}-flow-active"
         self.collection.aggregate([
             {"$project" : {
@@ -211,7 +220,7 @@ def parse_string_to_workflow(flowstring, flowname):
 
 def parse_yaml_to_workflow(yaml_file):
     with open(yaml_file) as yaml_contents:
-        data = yaml.load(yaml_contents)
+        data = yaml.load(yaml_contents, Loader=yaml.SafeLoader)
         flowstring = data["flow"]
         flowname = data["name"]
         return parse_string_to_workflow(flowstring, flowname)
