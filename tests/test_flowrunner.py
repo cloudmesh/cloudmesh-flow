@@ -3,14 +3,11 @@
 # pytest -v --capture=no tests/test_flowrunner.py
 # pytest -v  tests/test_flowrunner.py
 ###############################################################
-
-from __future__ import print_function
-
 import os
 
 from cloudmesh.common.ConfigDict import ConfigDict
 from cloudmesh.common.util import HEADING
-from cloudmesh.flow import WorkflowRunner
+from cloudmesh.flow import FlowRunner
 
 import pytest
 
@@ -22,9 +19,9 @@ class Test_flowrunner:
         pass
 
     def test_create(self):
-        runner = WorkflowRunner("test")
+        runner = FlowRunner("test")
 
     def test_run(self):
-        runner = WorkflowRunner("test")
+        runner = FlowRunner("test")
         runner.start_flow()
         assert runner.running == True

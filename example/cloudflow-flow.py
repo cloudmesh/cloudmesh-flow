@@ -1,5 +1,5 @@
 from cloudmesh.compute.vm.Provider import Provider
-from cloudmesh.flow.WorkFlow import BaseWorkFlow
+from cloudmesh.flow.Flow import Flow
 
 #
 # we assume image is ubuntu 19.04 in cloudmesh4.yaml
@@ -15,7 +15,7 @@ def start_vm(cloud, name=None):
     
     
 
-class MyFlow(BaseWorkFlow):
+class MyFlow(Flow):
     
         
     def start_aws(self):
@@ -44,7 +44,7 @@ class MyFlow(BaseWorkFlow):
 
 if __name__ == "__main__":
     Flow = MyFlow(sys.argv[0])
-    Flow.runCommand(sys.argv[1])
+    Flow._run(sys.argv[1])
 
     # please specify workflow here
     

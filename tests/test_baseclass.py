@@ -3,19 +3,15 @@
 # pytest -v --capture=no tests/test_baseclass.py
 # pytest -v  tests/test_baseclass.py
 ###############################################################
-
-
-from __future__ import print_function
-
 import os
 
 from cloudmesh.common.ConfigDict import ConfigDict
 from cloudmesh.common.util import HEADING
-from cloudmesh.flow.WorkFlow import BaseWorkFlow
-from cloudmesh.flow.WorkFlow import WorkFlowDB
+from cloudmesh.flow.Flow import Flow
+from cloudmesh.flow.Flow import FlowDatabase
 import pytest
 
-class SampleFlow(BaseWorkFlow):
+class SampleFlow(Flow):
     def a(self):
         return {"name" : "a", "result" : {"everything" : "ok"}}
 
@@ -26,7 +22,7 @@ class Test_baseclass:
         pass
 
     def setup(self):
-        self.db = WorkFlowDB("test")
+        self.db = FlowDatabase("test")
         self.db.collection.delete_many({})
         self.db.add_node({"name" : "a", "dependencies" : []})
         self.db.start_flow()
@@ -34,11 +30,11 @@ class Test_baseclass:
 
 
     def test_runmethod(self):
-        result = self.flow.runCommand("a")
+        result = self.flow._run("a")
         assert result["name"] == "a"
 
     def test_database_insertion(self):
-        result = self.flow.runCommand("a")
+        result = self.flow._run("a")
         dbresult = self.db.get_node("a")
         assert dbresult.result["name"] == "a"
         assert dbresult.result["result"]["everything"] == "ok"

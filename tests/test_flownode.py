@@ -3,9 +3,6 @@
 # pytest -v --capture=no tests/test_flownode.py
 # pytest -v  tests/test_flownode.py
 ###############################################################
-
-from __future__ import print_function
-
 import os
 
 from cloudmesh.common.ConfigDict import ConfigDict

@@ -3,14 +3,11 @@
 # pytest -v --capture=no tests/test_flowdb.py
 # pytest -v  tests/test_flowdb.py
 ###############################################################
-
-from __future__ import print_function
-
 import os
 
 from cloudmesh.common.ConfigDict import ConfigDict
 from cloudmesh.common.util import HEADING
-from cloudmesh.flow.WorkFlow import WorkFlowDB, parse_string_to_workflow
+from cloudmesh.flow.Flow import FlowDatabase, parse_string_to_workflow
 from cloudmesh.flow.Node import Node
 
 import pytest
@@ -22,7 +19,7 @@ class Test_flowdb:
         pass
 
     def setup(self):
-        self.db = WorkFlowDB("test")
+        self.db = FlowDatabase("test")
         self.db.collection.delete_many({})
 
     def test_add_node(self):
@@ -66,7 +63,7 @@ class Test_flowdb:
         for node in new_nodes:
             print(node.status)
             assert node.status == "pending"
-        self.db = WorkFlowDB("test")
+        self.db = FlowDatabase("test")
 
     def test_remove(self):
         self.db.collection.delete_many({})
