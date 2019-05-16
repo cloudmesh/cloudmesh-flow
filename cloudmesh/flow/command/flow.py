@@ -1,12 +1,10 @@
 from cloudmesh.shell.command import command
-from cloudmesh.shell.command import PluginCommand, map_parameters
-from cloudmesh.flow.Flow import  FlowDatabase, parse_string_to_workflow, parse_yaml_to_workflow
+from cloudmesh.shell.command import PluginCommand
+from cloudmesh.flow.Flow import  FlowDatabase, parse_yaml_to_workflow
 from cloudmesh.flow.FlowRunner import FlowRunner
-from cloudmesh.DEBUG import VERBOSE
+from cloudmesh.common.DEBUG import VERBOSE
 from cloudmesh.flow.Node import Node
-from cloudmesh.common.console import Console
 from cloudmesh.common.Printer import Printer
-from pprint import pprint
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.flow.visualize import manager
 

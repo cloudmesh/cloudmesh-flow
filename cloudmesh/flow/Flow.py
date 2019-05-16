@@ -1,14 +1,11 @@
 #!/usr/bin/python
 import sys
-import re
-from pprint import pprint
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.flow.Node import Node
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
 from lark import Lark, Visitor
-from lark.tree import pydot__tree_to_png
 import oyaml as yaml
-from cloudmesh.DEBUG import VERBOSE
+from cloudmesh.common.DEBUG import VERBOSE
 import inspect
 from cloudmesh.common.console import Console
 
