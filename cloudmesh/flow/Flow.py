@@ -5,7 +5,7 @@ from cloudmesh.flow.Node import Node
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
 from lark import Lark, Visitor
 import oyaml as yaml
-from cloudmesh.common.DEBUG import VERBOSE
+from cloudmesh.common.debug import VERBOSE
 import inspect
 from cloudmesh.common.console import Console
 

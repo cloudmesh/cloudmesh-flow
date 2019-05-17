@@ -2,7 +2,7 @@ from cloudmesh.shell.command import command
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.flow.Flow import  FlowDatabase, parse_yaml_to_workflow
 from cloudmesh.flow.FlowRunner import FlowRunner
-from cloudmesh.common.DEBUG import VERBOSE
+from cloudmesh.common.debug import VERBOSE
 from cloudmesh.flow.Node import Node
 from cloudmesh.common.Printer import Printer
 from cloudmesh.mongo.CmDatabase import CmDatabase
