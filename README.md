@@ -140,6 +140,10 @@ properties, flowstring and flowname. This allows you to add an entire
 flow at once unders a specfic name. See the examples directory for
 details.
 
+An example workflow specified as YAML is available at
+
+<https://github.com/cloudmesh/cloudmesh-flow/blob/master/example/sampleflow.yaml>
+
 ## Running Flows
 
 Workflows nodes correspond to Python functions that are attached to
