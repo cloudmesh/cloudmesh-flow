@@ -7,7 +7,7 @@ var home   = process.env.HOME;
 console.log(home)
 // Get document, or throw exception on error
 try {
-  var config = yaml.safeLoad(fs.readFileSync(home + '/.cloudmesh/cloudmesh4.yaml', 'utf8'));
+  var config = yaml.safeLoad(fs.readFileSync(home + '/.cloudmesh/cloudmesh.yaml', 'utf8'));
   console.log(config);
   console.log(config["cloudmesh"]["data"]["mongo"])
 } catch (e) {
