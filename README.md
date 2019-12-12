@@ -7,21 +7,32 @@ may be run in sequence and some in parallel. You can visualize your
 workflows, including the monitoring the current status of the tasks,
 and the dependency network between them.
 
-## Getting Started
+## Prerequisit
 
-To use this tool, you'll need to already have cloudmesh
-installed. Follow the instructions at the cloudmesh repository located
-here. This tool relies on MongoDB within the cloudmesh command, so
-you'll need to have Mongo up and running on your local machine.
+To use this tool, you will need to already have 
 
-To install this tool within cloudmesh, clone this repository and run 
+* cloudmesh-cloud, see <https://cloudmesh.github.io/cloudmesh-manual/>
+
+installed. Flow uses the same MongoDB that cloudmesh-cloud uses. 
+You can set it up by follwowing our instructions in the manual.
+
+## Instalation
+
+Please download cloudmesh-flow from github
 
 ```bash
+$ git clone https://github.com/cloudmesh/cloudmesh-flow.git
+```
+
+To complet the install do  
+
+```bash
+$ cd cloudmesh-flow
 $ pip install -e .
 ```
 
 
-The commands then should be available by calling the flow commands via
+The commands are available by calling the flow commands via
 `cms`. 
 
 The first thing you have to do is to start the cloudmesh database in
@@ -30,11 +41,9 @@ throughout the execution. If you have not yet started it please
 execute:
 
 ```bash
-$ cms admin mongo start
+$ cms init
 ```
-
-
-Now you can test that the installation went well by calling
+This command has to be called only once. Now you can test that the installation went well by calling
 
 ```bash
 $ cms flow list
@@ -47,8 +56,7 @@ output nothing if you have now prior workflows integrated.
 
 ### Adding Tasks
 
-There are several ways to add tasks to your workflow. The simplest is
-just to call 
+There are several ways to add tasks to your workflow. One way is to use the commandline
 
 ```bash
 $ cms flow node add TASKNAME
@@ -64,7 +72,7 @@ This creates a reference to the task
 in the database, and adds the task to your default workflow, which is
 named `workflow`
 
-By default, all tasks are run in parallel. Typically, you'll have
+By default, all tasks are run in parallel. Typically, you willl have
 multiple tasks that you need to run, some in sequence some in
 parallel. To add tasks `a`, `b`, and `c`, where `a` and `b` can be run
 in parallel but `c` depends on `a`, execute the following sequence:
@@ -140,6 +148,10 @@ properties, flowstring and flowname. This allows you to add an entire
 flow at once unders a specfic name. See the examples directory for
 details.
 
+An example workflow specified as YAML is available at
+
+<https://github.com/cloudmesh/cloudmesh-flow/blob/master/example/sampleflow.yaml>
+
 ## Running Flows
 
 Workflows nodes correspond to Python functions that are attached to
@@ -155,21 +167,19 @@ At the bottom of your file, copy the _entry point code_ that is listed
 on each of the example files:
 
 ```python
-
 if __name__ == "__main__":
     Flow = MyFlow(sys.argv[0])
     Flow.runCommand(sys.argv[1])
-    
 ```
 
-This makes it so the flow runner is able to call your
+This this allows our workflow engine to call your
 methods. Anything you return at the end of your function will be
-inserted into the database as the result of running that node. You
-should return a dict, which will be accessible via the `result` field
+inserted into the database as the result of running that node. You should 
+return a dict, which will be accessible via the `result` field
 in the db. Note that your filename should be of the form
 `$flowname-flow.py`. This makes it so the result parser can grab the
 result of your workflow methods and insert them into the database
-corresponding to the current run of $flowname.
+corresponding to the current run of `$flowname`.
 
 ## Visualizing
 
@@ -220,8 +230,6 @@ the name of the nodes and the dependencies between nodes. The features
 `progress`, `modified time` and `done` are added to the visualization
 package but currently these data are not present in the flow database
 or if present the data-access class does not retrieve them.
-
-
 
 
 ## Refernces
