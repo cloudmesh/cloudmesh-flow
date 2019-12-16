@@ -16,6 +16,7 @@ class FlowCommand(PluginCommand):
     def do_flow(self, args, arguments):
         """
         ::
+
           Usage:
                 flow list [--flow=NAME] [--output=FORMAT]
                 flow add [--flowname=FLOWNAME] --flowfile=FILENAME
