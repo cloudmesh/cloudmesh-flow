@@ -1,5 +1,5 @@
 ###############################################################
-# pip install .; pytest -v --capture=no -v --nocapture tests/test_baseclass.py:Test_baseclass.test_001
+# pip install .; pytest -v --capture=no -v --nocapture tests/test_baseclass..py::Test_baseclass.test_001
 # pytest -v --capture=no tests/test_baseclass.py
 # pytest -v  tests/test_baseclass.py
 ###############################################################

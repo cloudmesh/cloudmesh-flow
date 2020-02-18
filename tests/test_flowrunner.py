@@ -1,5 +1,5 @@
 ###############################################################
-# pip install .; pytest -v --capture=no -v --nocapture tests/test_flowrunner.py:Test_flowrunner.test_001
+# pip install .; pytest -v --capture=no -v --nocapture tests/test_flowrunner..py::Test_flowrunner.test_001
 # pytest -v --capture=no tests/test_flowrunner.py
 # pytest -v  tests/test_flowrunner.py
 ###############################################################
