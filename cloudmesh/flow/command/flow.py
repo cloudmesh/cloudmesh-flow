@@ -135,7 +135,7 @@ class FlowCommand(PluginCommand):
                 print("The visualization servive started at http://127.0.0.1:8080/flow/")
 
             elif arguments["stop"]:
-                manager.shutdown()
+                manager.stop()
 
         elif arguments["delete"] and arguments.edge:
             db = FlowDatabase(arguments.FLOWNAME)
