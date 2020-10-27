@@ -150,14 +150,14 @@ details.
 
 An example workflow specified as YAML is available at
 
-<https://github.com/cloudmesh/cloudmesh-flow/blob/master/example/sampleflow.yaml>
+<https://github.com/cloudmesh/cloudmesh-flow/blob/main/example/sampleflow.yaml>
 
 ## Running Flows
 
 Workflows nodes correspond to Python functions that are attached to
 specific workflow classes. To run a workflow, you need to specify the
 task definitions. The easiest way to see this in action is in the
-[examples directory](https://github.com/cloudmesh/cloudmesh-flow/tree/master/cloudmesh/flow/example).
+[examples directory](https://github.com/cloudmesh/cloudmesh-flow/tree/main/cloudmesh/flow/example).
 
 Defining a Workflow is simple: declare a class with one method for
 each node, and have the class inherit from the BaseWorkFlow base
