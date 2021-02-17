@@ -26,7 +26,7 @@
     "js-yaml": "^3.13.1",
     "minimatch": "^3.0.4",
     "mongodb": "^3.2.3",
-    "mongoose": "^5.5.2",
+    "mongoose": "^5.7.5",
     "react-digraph": "^6.2.2",
     "wrench": "^1.5.9"
   }
