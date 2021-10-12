@@ -16,7 +16,7 @@
   "author": "Cloudmesh Community",
   "license": "Apache",
   "devDependencies": {
-    "electron": "^4.1.4"
+    "electron": "^11.5.0"
   },
   "dependencies": {
     "cross-spawn-async": "^2.2.5",
